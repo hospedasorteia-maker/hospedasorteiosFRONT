@@ -1,4 +1,5 @@
 import Link from "next/link";
+import BackToDashboard from "./BackToDashboard";
 
 export default function AuthLayout({ icon, title, subtitle, footer, children }) {
   return (
@@ -15,7 +16,9 @@ export default function AuthLayout({ icon, title, subtitle, footer, children }) 
         <p className="auth__footer">{footer}</p>
 
         <p className="auth__back">
-          <Link href="/">← Voltar para o site</Link>
+          <BackToDashboard label="Ir para o painel" />
+          {" · "}
+          <Link href="/">Voltar para o site</Link>
         </p>
       </div>
     </main>

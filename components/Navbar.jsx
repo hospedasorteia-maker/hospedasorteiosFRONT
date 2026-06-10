@@ -34,6 +34,7 @@ export default function Navbar() {
         </nav>
 
         <div className="navbar__actions">
+          <Link href="/dashboard" className="btn btn--ghost btn--sm">Painel</Link>
           <Link href="/login" className="btn btn--ghost btn--sm">Entrar</Link>
           <Link href="/cadastro" className="btn btn--gradient btn--sm">Começar grátis</Link>
         </div>
@@ -54,6 +55,7 @@ export default function Navbar() {
         <a href="#como-funciona" onClick={closeMenu}>Como funciona</a>
         <a href="#planos" onClick={closeMenu}>Planos</a>
         <div className="navbar__mobile-actions">
+          <Link href="/dashboard" className="btn btn--outline" onClick={closeMenu}>Painel</Link>
           <Link href="/login" className="btn btn--outline" onClick={closeMenu}>Entrar</Link>
           <Link href="/cadastro" className="btn btn--gradient" onClick={closeMenu}>Criar conta</Link>
         </div>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import BackToDashboard from "./BackToDashboard";
 import {
   getPurchasesFromStorage,
   getBuyerProfile,
@@ -87,6 +88,9 @@ export default function MinhasComprasPage() {
   if (loading) {
     return (
       <div className="minhas-compras minhas-compras--loading">
+        <header className="minhas-compras__header">
+          <BackToDashboard className="rifa-publica__back" />
+        </header>
         <div className="rifa-publica__spinner" />
       </div>
     );
@@ -103,7 +107,9 @@ export default function MinhasComprasPage() {
   return (
     <div className="minhas-compras">
       <header className="minhas-compras__header">
-        <Link href="/" className="minhas-compras__brand">
+        <div className="minhas-compras__header-row">
+          <BackToDashboard className="rifa-publica__back" />
+          <Link href="/dashboard" className="minhas-compras__brand">
           <span className="rifa-publica__brand-icon" style={{ backgroundColor: "#7C3AED" }}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
@@ -111,6 +117,7 @@ export default function MinhasComprasPage() {
           </span>
           RifaMaster
         </Link>
+        </div>
       </header>
 
       <div className="minhas-compras__body">
@@ -172,7 +179,7 @@ export default function MinhasComprasPage() {
             </svg>
             <p>Nenhuma compra encontrada</p>
             <span>Participe de um sorteio para ver suas compras aqui.</span>
-            <Link href="/dashboard" className="btn btn--violet btn--sm">Ver sorteios</Link>
+            <BackToDashboard className="btn btn--violet btn--sm back-to-dashboard--btn" label="Voltar ao painel" showIcon={false} />
           </div>
         ) : (
           <div className="minhas-compras__list">

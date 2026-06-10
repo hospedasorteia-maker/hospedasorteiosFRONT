@@ -11,10 +11,12 @@ import {
   saveBuyerProfile,
   getReservedNumbers,
 } from "@/lib/purchases";
+import { loadParticipants } from "@/lib/participants";
 import NumberGrid from "./NumberGrid";
 import PixPaymentModal from "./PixPaymentModal";
 import BuyerInfoModal from "./BuyerInfoModal";
 import MinhaCompra from "./MinhaCompra";
+import BackToDashboard from "./BackToDashboard";
 
 function countOccupied(confirmed, reserved) {
   return new Set([...confirmed, ...reserved]).size;
@@ -86,6 +88,7 @@ export default function RifaPublica() {
     setBuyerOpen(false);
     setPixOpen(true);
     setReservedNumbers((prev) => [...new Set([...prev, ...pendingSelection.numbers])]);
+    loadParticipants();
     setPurchaseRefresh((k) => k + 1);
   }
 
@@ -114,6 +117,7 @@ export default function RifaPublica() {
 
     updatePurchase(activePurchase.id, { status: "confirmed", confirmedAt: new Date().toISOString() });
     saveRaffleToStorage(updated);
+    loadParticipants();
 
     setRaffle(updated);
     setSoldNumbers(confirmedNumbers);
@@ -138,6 +142,9 @@ export default function RifaPublica() {
   if (loading) {
     return (
       <div className="rifa-publica rifa-publica--loading">
+        <header className="rifa-publica__header rifa-publica__header--minimal">
+          <BackToDashboard className="rifa-publica__back" />
+        </header>
         <div className="rifa-publica__spinner"></div>
       </div>
     );
@@ -149,7 +156,10 @@ export default function RifaPublica() {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
         <h1>Sorteio não encontrado</h1>
         <p>Este link pode ter expirado ou não existe.</p>
-        <Link href="/">Voltar ao site</Link>
+        <div className="rifa-publica__empty-actions">
+          <BackToDashboard className="btn btn--violet btn--sm back-to-dashboard--btn" label="Voltar ao painel" showIcon={false} />
+          <Link href="/">Voltar ao site</Link>
+        </div>
       </div>
     );
   }
@@ -164,11 +174,14 @@ export default function RifaPublica() {
   return (
     <div className="rifa-publica">
       <header className="rifa-publica__header">
-        <div className="rifa-publica__brand">
-          <span className="rifa-publica__brand-icon" style={{ backgroundColor: primary }}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" /></svg>
-          </span>
-          <span style={{ color: primary }}>RifaMaster</span>
+        <div className="rifa-publica__header-left">
+          <BackToDashboard className="rifa-publica__back" />
+          <Link href="/dashboard" className="rifa-publica__brand">
+            <span className="rifa-publica__brand-icon" style={{ backgroundColor: primary }}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" /></svg>
+            </span>
+            <span style={{ color: primary }}>RifaMaster</span>
+          </Link>
         </div>
         <div className="rifa-publica__header-actions">
           <Link href="/minhas-compras" className="rifa-publica__minhas-compras">

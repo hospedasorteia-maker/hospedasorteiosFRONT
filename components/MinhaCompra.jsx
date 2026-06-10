@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import BackToDashboard from "./BackToDashboard";
 import {
   getPurchasesForBuyer,
   getBuyerProfile,
@@ -203,6 +204,8 @@ export default function MinhaCompra({ raffleId, raffleTitle, totalNumbers, prima
               <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
             </svg>
           </Link>
+
+          <BackToDashboard className="minha-compra__link-dashboard" label="Voltar ao painel" showIcon={false} />
         </div>
       )}
     </div>

@@ -3,45 +3,16 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   getRaffleById,
   createEmptyRaffle,
+  normalizeRaffle,
   saveRaffleToStorage,
-  formatDrawDate,
-  fmtCurrency,
 } from "@/lib/raffles";
-
-function RafflePreview({ config }) {
-  const primary = config.themeColors?.primary || "#7C3AED";
-  const secondary = config.themeColors?.secondary || "#A855F7";
-
-  return (
-    <div className="editor-preview" style={{ borderColor: `${primary}33` }}>
-      <div className="editor-preview__cover">
-        {config.imageUrl ? (
-          <img src={config.imageUrl} alt={config.prizeName || "Prêmio"} />
-        ) : (
-          <div style={{ background: `linear-gradient(135deg, ${primary}, ${secondary})` }} />
-        )}
-        {config.prizeName && (
-          <span className="editor-preview__prize-badge">{config.prizeName}</span>
-        )}
-      </div>
-      <div className="editor-preview__body">
-        <h3>{config.title || "Nome do Sorteio"}</h3>
-        {config.description && <p>{config.description}</p>}
-        <div className="editor-preview__meta">
-          <span># {config.totalNumbers || 0}</span>
-          {config.drawDate && <span>{formatDrawDate(config.drawDate)}</span>}
-          {config.price > 0 && <strong style={{ color: primary }}>R$ {fmtCurrency(config.price)}</strong>}
-        </div>
-        <div className="editor-preview__cta" style={{ backgroundColor: primary }}>
-          Participar agora
-        </div>
-      </div>
-    </div>
-  );
-}
+import EditorSidebar from "./editor/EditorSidebar";
+import EditorRafflePreview from "./editor/EditorRafflePreview";
+import BackToDashboard from "./BackToDashboard";
 
 export default function RaffleEditor() {
   const params = useParams();
@@ -53,39 +24,32 @@ export default function RaffleEditor() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [previewMode, setPreviewMode] = useState("desktop");
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
     if (isNew) {
       setConfig(createEmptyRaffle());
     } else {
-      const found = getRaffleById(id);
-      setConfig(found || createEmptyRaffle());
+      setConfig(normalizeRaffle(getRaffleById(id)));
     }
     setLoading(false);
   }, [id, isNew]);
 
-  function update(field, value) {
-    setConfig((prev) => ({ ...prev, [field]: value }));
-    setSaved(false);
-  }
-
-  function updateColor(key, value) {
-    setConfig((prev) => ({
-      ...prev,
-      themeColors: { ...prev.themeColors, [key]: value },
-    }));
+  function handleChange(next) {
+    setConfig(next);
     setSaved(false);
   }
 
   function handleSave() {
-    if (!config.title.trim()) {
+    if (!config?.title?.trim()) {
       alert("Informe o título do sorteio.");
       return;
     }
     setSaving(true);
     const toSave = {
       ...config,
-      status: config.status === "draft" ? "active" : config.status,
+      status: config.status === "draft" && !isNew ? config.status : config.status || "active",
     };
     saveRaffleToStorage(toSave);
     setSaving(false);
@@ -96,104 +60,89 @@ export default function RaffleEditor() {
   }
 
   if (loading || !config) {
-    return <div className="editor-loading">Carregando editor...</div>;
+    return (
+      <div className="editor-loading">
+        <header className="editor-v2__toolbar editor-v2__toolbar--standalone">
+          <BackToDashboard className="editor-v2__tool-btn" label="Voltar ao painel" />
+        </header>
+        <div className="rifa-publica__spinner" />
+      </div>
+    );
   }
 
   return (
-    <div className="editor">
-      <aside className="editor__sidebar">
-        <div className="editor__sidebar-head">
-          <h2>Editor de Sorteio</h2>
-          <p>Monte do seu jeito</p>
-        </div>
+    <div className="editor-v2">
+      <AnimatePresence initial={false}>
+        {sidebarOpen && (
+          <motion.div
+            className="editor-v2__sidebar-wrap"
+            initial={{ x: -320, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -320, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          >
+            <EditorSidebar config={config} onChange={handleChange} />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-        <div className="editor__form">
-          <div className="editor__field">
-            <label htmlFor="title">Título do sorteio</label>
-            <input id="title" value={config.title} onChange={(e) => update("title", e.target.value)} placeholder="Ex: iPhone 15 Pro Max 256GB" />
+      <div className="editor-v2__main">
+        <div className="editor-v2__toolbar">
+          <div className="editor-v2__toolbar-left">
+            <BackToDashboard className="editor-v2__tool-btn" label="Voltar" />
+            <button type="button" className="editor-v2__tool-btn" onClick={() => setSidebarOpen(!sidebarOpen)}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" /><circle cx="12" cy="12" r="3" /></svg>
+              {sidebarOpen ? "Ocultar Painel" : "Mostrar Painel"}
+            </button>
           </div>
 
-          <div className="editor__field">
-            <label htmlFor="prizeName">Nome do prêmio</label>
-            <input id="prizeName" value={config.prizeName} onChange={(e) => update("prizeName", e.target.value)} placeholder="Ex: iPhone 15 Pro Max" />
-          </div>
-
-          <div className="editor__field">
-            <label htmlFor="description">Descrição</label>
-            <textarea id="description" rows={3} value={config.description} onChange={(e) => update("description", e.target.value)} placeholder="Descreva o sorteio..." />
-          </div>
-
-          <div className="editor__field">
-            <label htmlFor="imageUrl">URL da imagem</label>
-            <input id="imageUrl" value={config.imageUrl} onChange={(e) => update("imageUrl", e.target.value)} placeholder="https://..." />
-          </div>
-
-          <div className="editor__row">
-            <div className="editor__field">
-              <label htmlFor="totalNumbers">Total de números</label>
-              <input id="totalNumbers" type="number" min={1} value={config.totalNumbers} onChange={(e) => update("totalNumbers", Number(e.target.value))} />
-            </div>
-            <div className="editor__field">
-              <label htmlFor="price">Preço (R$)</label>
-              <input id="price" type="number" min={0} step={0.01} value={config.price} onChange={(e) => update("price", Number(e.target.value))} />
-            </div>
-          </div>
-
-          <div className="editor__field">
-            <label htmlFor="drawDate">Data do sorteio</label>
-            <input id="drawDate" type="date" value={config.drawDate} onChange={(e) => update("drawDate", e.target.value)} />
-          </div>
-
-          <div className="editor__field">
-            <label htmlFor="status">Status</label>
-            <select id="status" value={config.status} onChange={(e) => update("status", e.target.value)}>
-              <option value="draft">Rascunho</option>
-              <option value="active">Ativo</option>
-              <option value="completed">Finalizado</option>
-            </select>
-          </div>
-
-          <div className="editor__field">
-            <label htmlFor="pixKey">Chave PIX (recebimento)</label>
-            <input id="pixKey" value={config.pixKey || ""} onChange={(e) => update("pixKey", e.target.value)} placeholder="E-mail, CPF, CNPJ ou chave aleatória" />
-          </div>
-
-          <div className="editor__field">
-            <label htmlFor="pixMerchantName">Nome no PIX</label>
-            <input id="pixMerchantName" value={config.pixMerchantName || ""} onChange={(e) => update("pixMerchantName", e.target.value)} placeholder="Nome exibido no pagamento" maxLength={25} />
-          </div>
-
-          <div className="editor__field">
-            <label htmlFor="primaryColor">Cor principal</label>
-            <div className="editor__color">
-              <input id="primaryColor" type="color" value={config.themeColors?.primary || "#7C3AED"} onChange={(e) => updateColor("primary", e.target.value)} />
-              <span>{config.themeColors?.primary}</span>
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      <div className="editor__main">
-        <div className="editor__toolbar">
-          <Link href="/dashboard" className="editor__back">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
-            Voltar
-          </Link>
-          <div className="editor__toolbar-actions">
+          <div className="editor-v2__toolbar-right">
             {!isNew && (
               <Link href={`/rifa/${config.id}`} target="_blank" className="btn btn--outline btn--sm">
                 Ver página pública
               </Link>
             )}
-            <button type="button" className="btn btn--violet btn--sm" disabled={saving} onClick={handleSave}>
+
+            <div className="editor-v2__preview-toggle">
+              <button type="button" className={previewMode === "desktop" ? "is-active" : ""} onClick={() => setPreviewMode("desktop")} aria-label="Preview desktop">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect width="20" height="14" x="2" y="3" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
+              </button>
+              <button type="button" className={previewMode === "mobile" ? "is-active" : ""} onClick={() => setPreviewMode("mobile")} aria-label="Preview mobile">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect width="14" height="20" x="5" y="2" rx="2" /><line x1="12" y1="18" x2="12.01" y2="18" /></svg>
+              </button>
+            </div>
+
+            <button type="button" className="btn btn--violet btn--sm editor-v2__save" disabled={saving} onClick={handleSave}>
+              {saving ? (
+                <span className="editor-v2__save-loading" />
+              ) : (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" /><polyline points="17 21 17 13 7 13 7 21" /><polyline points="7 3 7 8 15 8" /></svg>
+              )}
               {saving ? "Salvando..." : saved ? "Salvo!" : isNew ? "Criar Sorteio" : "Salvar"}
             </button>
           </div>
         </div>
 
-        <div className="editor__canvas">
-          <p className="editor__canvas-label">Preview</p>
-          <RafflePreview config={config} />
+        <div className="editor-v2__canvas">
+          <div
+            className="editor-v2__preview-frame"
+            style={{
+              width: previewMode === "mobile" ? "380px" : "100%",
+              maxWidth: previewMode === "mobile" ? "380px" : "600px",
+            }}
+          >
+            <p className="editor-v2__preview-label">
+              Preview — {previewMode === "mobile" ? "Mobile" : "Desktop"}
+            </p>
+            <motion.div
+              key={`${config.layoutConfig?.cardStyle}-${config.layoutConfig?.imagePosition}-${previewMode}`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <EditorRafflePreview config={config} />
+            </motion.div>
+          </div>
         </div>
       </div>
     </div>

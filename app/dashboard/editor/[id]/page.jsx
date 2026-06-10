@@ -1,4 +1,3 @@
-import AppShell from "@/components/AppShell";
 import RaffleEditor from "@/components/RaffleEditor";
 
 export const metadata = {
@@ -7,8 +6,8 @@ export const metadata = {
 
 export default function EditorPage() {
   return (
-    <AppShell fullWidth>
+    <div className="editor-page">
       <RaffleEditor />
-    </AppShell>
+    </div>
   );
 }
