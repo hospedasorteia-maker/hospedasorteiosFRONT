@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — RifaMaster</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar__logo">
+      <a href="dashboard.html" class="brand">
+        <span class="brand__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+        </span>
+        <span class="brand__name">Sorteios</span>
+      </a>
+    </div>
+
+    <nav class="sidebar__nav">
+      <div class="nav-section">
+        <p class="nav-section__label">Plataforma</p>
+        <a href="dashboard.html" class="nav-item nav-item--active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>
+          Campanhas
+        </a>
+        <a href="#" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Participantes
+        </a>
+        <a href="#" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Relatórios
+        </a>
+      </div>
+
+      <div class="nav-section">
+        <p class="nav-section__label">Configurações</p>
+        <a href="#" class="nav-item nav-item--arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span>Configurações</span>
+          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a href="#" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          Meio de Pagamento
+        </a>
+        <a href="#" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+          Personalizar Rifa
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar__bottom">
+      <a href="#" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z"/></svg>
+        Suporte
+      </a>
+      <a href="#" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Central de Ajuda
+      </a>
+      <a href="login.html" class="nav-item nav-item--logout">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sair
+      </a>
+
+      <div class="plan-card">
+        <div class="plan-card__head">
+          <span class="plan-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+          </span>
+          <div>
+            <p class="plan-card__title">Minha Conta</p>
+            <p class="plan-card__plan">Plano gratuito</p>
+          </div>
+        </div>
+        <button type="button" class="plan-card__btn">Criar Sorteio</button>
+      </div>
+    </div>
+  </aside>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- ============ CONTEÚDO ============ -->
+  <main class="main">
+
+    <!-- Topbar mobile -->
+    <div class="topbar">
+      <button class="topbar__menu" id="menuBtn" aria-label="Abrir menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+      </button>
+      <span class="topbar__title">Sorteios</span>
+    </div>
+
+    <div class="content">
+
+      <!-- Header -->
+      <div class="page-head">
+        <div>
+          <h1>Dashboard</h1>
+          <p>Acompanhe suas vendas e sorteios em tempo real</p>
+        </div>
+        <button type="button" class="btn btn--violet">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span class="hide-mobile">Novo Sorteio</span>
+          <span class="show-mobile">Novo</span>
+        </button>
+      </div>
+
+      <!-- Métricas principais -->
+      <div class="metrics-primary">
+        <div class="metric-big metric-big--violet metric-big--wide">
+          <div class="metric-big__circle metric-big__circle--tr"></div>
+          <div class="metric-big__circle metric-big__circle--bl"></div>
+          <div class="metric-big__content">
+            <div class="metric-big__top">
+              <span class="metric-big__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              </span>
+              <span class="metric-big__trend">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                +12%
+              </span>
+            </div>
+            <p class="metric-big__label">Total Arrecadado</p>
+            <p class="metric-big__value">R$ 8.450,00</p>
+            <p class="metric-big__sub">142 compras confirmadas · Ticket médio: R$ 59,51</p>
+          </div>
+        </div>
+
+        <div class="metric-big metric-big--amber">
+          <div class="metric-big__circle metric-big__circle--tr"></div>
+          <div class="metric-big__circle metric-big__circle--bl"></div>
+          <div class="metric-big__content">
+            <div class="metric-big__top">
+              <span class="metric-big__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>
+              </span>
+              <span class="metric-big__trend">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                +8%
+              </span>
+            </div>
+            <p class="metric-big__label">Números Vendidos</p>
+            <p class="metric-big__value">315</p>
+            <p class="metric-big__sub">2 sorteios ativos · 87 participantes</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Métricas secundárias -->
+      <div class="metrics-secondary">
+        <div class="metric-small">
+          <div class="metric-small__head">
+            <span class="metric-small__icon accent-emerald">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+            </span>
+            <p>Sorteios Ativos</p>
+          </div>
+          <p class="metric-small__value">2</p>
+          <p class="metric-small__sub">de 3 total</p>
+        </div>
+
+        <div class="metric-small">
+          <div class="metric-small__head">
+            <span class="metric-small__icon accent-sky">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            </span>
+            <p>Total de Compras</p>
+          </div>
+          <p class="metric-small__value">142</p>
+          <p class="metric-small__sub">todas as transações</p>
+        </div>
+
+        <div class="metric-small">
+          <div class="metric-small__head">
+            <span class="metric-small__icon accent-rose">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </span>
+            <p>Participantes</p>
+          </div>
+          <p class="metric-small__value">87</p>
+          <p class="metric-small__sub">únicos</p>
+        </div>
+
+        <div class="metric-small">
+          <div class="metric-small__head">
+            <span class="metric-small__icon accent-indigo">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+            </span>
+            <p>Ticket Médio</p>
+          </div>
+          <p class="metric-small__value">R$ 59,51</p>
+          <p class="metric-small__sub">por compra</p>
+        </div>
+      </div>
+
+      <!-- Acesso rápido -->
+      <div class="quick-access">
+        <p class="quick-access__title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Acesso Rápido
+        </p>
+        <div class="quick-access__grid">
+          <a href="#" class="quick-link quick-link--violet">
+            <span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+              Relatórios
+            </span>
+            <svg class="quick-link__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </a>
+          <a href="#" class="quick-link">
+            <span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              Participantes
+            </span>
+            <svg class="quick-link__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </a>
+          <a href="#" class="quick-link">
+            <span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></svg>
+              Configurações
+            </span>
+            <svg class="quick-link__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Seus sorteios -->
+      <div class="raffles">
+        <div class="raffles__head">
+          <h2>Seus Sorteios</h2>
+          <div class="search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="searchInput" placeholder="Buscar sorteios..." />
+          </div>
+        </div>
+
+        <div class="raffles__grid" id="rafflesGrid">
+
+          <article class="raffle-card" data-title="sorteio iphone 16 pro">
+            <div class="raffle-card__img raffle-card__img--violet">
+              <span class="raffle-card__status raffle-card__status--active">Ativo</span>
+              📱
+            </div>
+            <div class="raffle-card__body">
+              <h3>Sorteio iPhone 16 Pro</h3>
+              <p class="raffle-card__price">R$ 10,00 <small>por número</small></p>
+              <div class="raffle-card__progress">
+                <div class="raffle-card__bar" style="width: 72%"></div>
+              </div>
+              <div class="raffle-card__meta">
+                <span>72 / 100 vendidos</span>
+                <span>72%</span>
+              </div>
+              <div class="raffle-card__actions">
+                <button type="button" class="btn btn--violet btn--sm">Ver sorteio</button>
+                <button type="button" class="btn btn--light btn--sm">Editar</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="raffle-card" data-title="rifa moto honda cg 160">
+            <div class="raffle-card__img raffle-card__img--amber">
+              <span class="raffle-card__status raffle-card__status--active">Ativo</span>
+              🏍️
+            </div>
+            <div class="raffle-card__body">
+              <h3>Rifa Moto Honda CG 160</h3>
+              <p class="raffle-card__price">R$ 25,00 <small>por número</small></p>
+              <div class="raffle-card__progress">
+                <div class="raffle-card__bar" style="width: 45%"></div>
+              </div>
+              <div class="raffle-card__meta">
+                <span>225 / 500 vendidos</span>
+                <span>45%</span>
+              </div>
+              <div class="raffle-card__actions">
+                <button type="button" class="btn btn--violet btn--sm">Ver sorteio</button>
+                <button type="button" class="btn btn--light btn--sm">Editar</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="raffle-card" data-title="cesta de natal premium">
+            <div class="raffle-card__img raffle-card__img--emerald">
+              <span class="raffle-card__status raffle-card__status--done">Finalizado</span>
+              🎁
+            </div>
+            <div class="raffle-card__body">
+              <h3>Cesta de Natal Premium</h3>
+              <p class="raffle-card__price">R$ 5,00 <small>por número</small></p>
+              <div class="raffle-card__progress">
+                <div class="raffle-card__bar" style="width: 100%"></div>
+              </div>
+              <div class="raffle-card__meta">
+                <span>50 / 50 vendidos</span>
+                <span>100%</span>
+              </div>
+              <div class="raffle-card__actions">
+                <button type="button" class="btn btn--violet btn--sm">Ver resultado</button>
+                <button type="button" class="btn btn--light btn--sm">Detalhes</button>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <div class="raffles__empty" id="rafflesEmpty" hidden>
+          <div class="raffles__empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+          </div>
+          <h3>Nenhum resultado encontrado</h3>
+          <p>Tente buscar por outro termo ou crie um novo sorteio.</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+  // ---------- Sidebar mobile ----------
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("sidebarOverlay");
+  const menuBtn = document.getElementById("menuBtn");
+
+  menuBtn.addEventListener("click", () => {
+    sidebar.classList.add("is-open");
+    overlay.classList.add("is-visible");
+  });
+
+  overlay.addEventListener("click", () => {
+    sidebar.classList.remove("is-open");
+    overlay.classList.remove("is-visible");
+  });
+
+  // ---------- Busca de sorteios ----------
+  const searchInput = document.getElementById("searchInput");
+  const cards = document.querySelectorAll(".raffle-card");
+  const emptyState = document.getElementById("rafflesEmpty");
+
+  searchInput.addEventListener("input", () => {
+    const term = searchInput.value.trim().toLowerCase();
+    let visible = 0;
+
+    cards.forEach((card) => {
+      const match = card.dataset.title.includes(term);
+      card.hidden = !match;
+      if (match) visible++;
+    });
+
+    emptyState.hidden = visible > 0;
+  });
+</script>
+</body>
+</html>
