@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
+import DeleteRaffleModal from "./DeleteRaffleModal";
 import { formatDrawDate } from "@/lib/raffles";
 
 const STATUS = {
@@ -9,10 +11,17 @@ const STATUS = {
   draft: { label: "Rascunho", className: "raffle-card__status--draft" },
 };
 
-export default function RaffleCard({ raffle }) {
+export default function RaffleCard({ raffle, onDelete }) {
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const status = STATUS[raffle.status] || STATUS.draft;
 
+  function handleConfirmDelete() {
+    onDelete?.(raffle.id);
+    setShowDeleteModal(false);
+  }
+
   return (
+    <>
     <article className="raffle-card">
       <div
         className="raffle-card__cover"
@@ -67,8 +76,21 @@ export default function RaffleCard({ raffle }) {
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6" /><path d="M10 14 21 3" /><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></svg>
             Página pública
           </Link>
+          <button type="button" className="btn btn--outline btn--sm raffle-card__delete" onClick={() => setShowDeleteModal(true)}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /><line x1="10" y1="11" x2="10" y2="17" /><line x1="14" y1="11" x2="14" y2="17" /></svg>
+            Excluir
+          </button>
         </div>
       </div>
     </article>
+
+    {showDeleteModal && (
+      <DeleteRaffleModal
+        raffle={raffle}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleConfirmDelete}
+      />
+    )}
+    </>
   );
 }

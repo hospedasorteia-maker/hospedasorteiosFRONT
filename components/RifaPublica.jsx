@@ -12,6 +12,8 @@ import {
   getReservedNumbers,
 } from "@/lib/purchases";
 import { loadParticipants } from "@/lib/participants";
+import { getSupportSettings } from "@/lib/settings";
+import { buildWhatsAppHref } from "@/lib/support";
 import NumberGrid from "./NumberGrid";
 import PixPaymentModal from "./PixPaymentModal";
 import BuyerInfoModal from "./BuyerInfoModal";
@@ -38,6 +40,7 @@ export default function RifaPublica() {
   const [activePurchase, setActivePurchase] = useState(null);
   const [pixPayload, setPixPayload] = useState("");
   const [purchaseRefresh, setPurchaseRefresh] = useState(0);
+  const [supportContacts, setSupportContacts] = useState({ whatsapp: "", email: "" });
 
   function syncRaffleState(found) {
     setRaffle(found);
@@ -52,6 +55,7 @@ export default function RifaPublica() {
   useEffect(() => {
     syncRaffleState(getRaffleById(id));
     setLoading(false);
+    setSupportContacts(getSupportSettings());
   }, [id]);
 
   function handlePurchase({ numbers, amount }) {
@@ -313,6 +317,21 @@ export default function RifaPublica() {
             </div>
           ))}
         </div>
+
+        {supportContacts.whatsapp && (
+          <a
+            href={buildWhatsAppHref(
+              supportContacts.whatsapp,
+              `${supportContacts.whatsappMessage || "Olá! Tenho uma dúvida sobre o sorteio"} "${raffle.title}"`
+            )}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rifa-publica__whatsapp"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" /></svg>
+            Dúvidas? Fale conosco no WhatsApp
+          </a>
+        )}
 
         <p className="rifa-publica__powered">
           Powered by <strong style={{ color: primary }}>RifaMaster</strong>
