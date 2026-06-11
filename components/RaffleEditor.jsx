@@ -12,6 +12,7 @@ import {
 } from "@/lib/raffles";
 import EditorSidebar from "./editor/EditorSidebar";
 import EditorRafflePreview from "./editor/EditorRafflePreview";
+import EditorAlertModal from "./editor/EditorAlertModal";
 import BackToDashboard from "./BackToDashboard";
 
 export default function RaffleEditor() {
@@ -26,6 +27,9 @@ export default function RaffleEditor() {
   const [saved, setSaved] = useState(false);
   const [previewMode, setPreviewMode] = useState("desktop");
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [titleError, setTitleError] = useState(false);
+  const [showTitleAlert, setShowTitleAlert] = useState(false);
+  const [focusTitleTick, setFocusTitleTick] = useState(0);
 
   useEffect(() => {
     if (isNew) {
@@ -39,11 +43,15 @@ export default function RaffleEditor() {
   function handleChange(next) {
     setConfig(next);
     setSaved(false);
+    if (next.title?.trim()) setTitleError(false);
   }
 
   function handleSave() {
     if (!config?.title?.trim()) {
-      alert("Informe o título do sorteio.");
+      setTitleError(true);
+      setShowTitleAlert(true);
+      setSidebarOpen(true);
+      setFocusTitleTick((t) => t + 1);
       return;
     }
     setSaving(true);
@@ -81,7 +89,12 @@ export default function RaffleEditor() {
             exit={{ x: -320, opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
-            <EditorSidebar config={config} onChange={handleChange} />
+            <EditorSidebar
+              config={config}
+              onChange={handleChange}
+              titleError={titleError}
+              focusTitleTick={focusTitleTick}
+            />
           </motion.div>
         )}
       </AnimatePresence>
@@ -145,6 +158,20 @@ export default function RaffleEditor() {
           </div>
         </div>
       </div>
+
+      <EditorAlertModal
+        open={showTitleAlert}
+        onClose={() => setShowTitleAlert(false)}
+        onAction={() => {
+          setShowTitleAlert(false);
+          setSidebarOpen(true);
+          setFocusTitleTick((t) => t + 1);
+        }}
+        title="Informe o título do sorteio"
+        message="O título aparece na página pública e ajuda os participantes a entenderem o prêmio. Preencha o campo na aba Info antes de salvar."
+        actionLabel="Preencher título"
+        tone="warning"
+      />
     </div>
   );
 }

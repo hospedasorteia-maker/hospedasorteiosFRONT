@@ -3,13 +3,15 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import GoogleIcon from "./GoogleIcon";
+import GoogleSignInModal from "./GoogleSignInModal";
+import { completeGoogleSignIn } from "@/lib/auth";
 
 export default function CadastroForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [googleOpen, setGoogleOpen] = useState(false);
 
-  // Cadastro visual (sem backend): valida senhas iguais e entra no dashboard
   function handleSubmit(e) {
     e.preventDefault();
     const form = e.currentTarget;
@@ -25,12 +27,23 @@ export default function CadastroForm() {
     setTimeout(() => router.push("/dashboard"), 800);
   }
 
+  function handleGoogleSuccess({ name, email }) {
+    completeGoogleSignIn({ name, email });
+    router.push("/dashboard");
+  }
+
   return (
     <>
-      <button type="button" className="btn btn--outline btn--block" onClick={() => router.push("/dashboard")}>
+      <button type="button" className="btn btn--outline btn--block" onClick={() => setGoogleOpen(true)}>
         <GoogleIcon />
         Continuar com Google
       </button>
+
+      <GoogleSignInModal
+        open={googleOpen}
+        onClose={() => setGoogleOpen(false)}
+        onSuccess={handleGoogleSuccess}
+      />
 
       <div className="divider"><span>ou</span></div>
 

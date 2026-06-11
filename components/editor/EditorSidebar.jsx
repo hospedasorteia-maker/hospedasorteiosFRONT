@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import EditorColorPicker from "./EditorColorPicker";
 import EditorImagePositionSelector from "./EditorImagePositionSelector";
 import EditorCardStyleSelector from "./EditorCardStyleSelector";
+import JogoDoBichoRoller from "../JogoDoBichoRoller";
+import { BICHO_TOTAL_NUMBERS, getAnimalLabel } from "@/lib/jogoDoBicho";
 
 const NUMBER_PRESETS = [25, 50, 100, 150, 200, 300, 500, 1000];
 
@@ -39,8 +41,9 @@ function TabIcon({ type }) {
   );
 }
 
-export default function EditorSidebar({ config, onChange }) {
+export default function EditorSidebar({ config, onChange, titleError = false, focusTitleTick = 0 }) {
   const [activeTab, setActiveTab] = useState("info");
+  const titleRef = useRef(null);
   const [uploading, setUploading] = useState(false);
   const [uploadingCert, setUploadingCert] = useState(false);
   const [newCoupon, setNewCoupon] = useState({
@@ -111,6 +114,15 @@ export default function EditorSidebar({ config, onChange }) {
 
   const primary = config.themeColors?.primary || "#7C3AED";
 
+  useEffect(() => {
+    if (!titleError && !focusTitleTick) return;
+    setActiveTab("info");
+    requestAnimationFrame(() => {
+      titleRef.current?.focus();
+      titleRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  }, [titleError, focusTitleTick]);
+
   return (
     <aside className="editor-sidebar">
       <div className="editor-sidebar__head">
@@ -139,8 +151,24 @@ export default function EditorSidebar({ config, onChange }) {
         {activeTab === "info" && (
           <div className="editor-sidebar__panel">
             <div className="editor-field">
-              <label className="editor-field__label">Título do Sorteio</label>
-              <input className="editor-field__input" value={config.title || ""} onChange={(e) => update("title", e.target.value)} placeholder="Ex: Rifa do iPhone 15 Pro" />
+              <label className="editor-field__label" htmlFor="editor-raffle-title">
+                Título do Sorteio {titleError && <span className="editor-field__required">*</span>}
+              </label>
+              <input
+                id="editor-raffle-title"
+                ref={titleRef}
+                className={`editor-field__input${titleError ? " editor-field__input--error" : ""}`}
+                value={config.title || ""}
+                onChange={(e) => update("title", e.target.value)}
+                placeholder="Ex: Rifa do iPhone 15 Pro"
+                aria-invalid={titleError}
+                aria-describedby={titleError ? "editor-title-error" : undefined}
+              />
+              {titleError && (
+                <p id="editor-title-error" className="editor-field__error">
+                  Informe um título para criar o sorteio.
+                </p>
+              )}
             </div>
             <div className="editor-field">
               <label className="editor-field__label">Descrição</label>
@@ -151,14 +179,49 @@ export default function EditorSidebar({ config, onChange }) {
               <input className="editor-field__input" value={config.prizeName || ""} onChange={(e) => update("prizeName", e.target.value)} placeholder="Ex: iPhone 15 Pro Max" />
             </div>
             <hr className="editor-divider" />
-            <div className="editor-field">
-              <label className="editor-field__label">Quantidade de Números: {config.totalNumbers || 100}</label>
-              <input type="range" min={10} max={1000} step={5} value={config.totalNumbers || 100} onChange={(e) => update("totalNumbers", Number(e.target.value))} className="editor-slider" />
-              <div className="editor-presets">
-                {NUMBER_PRESETS.map((n) => (
-                  <button key={n} type="button" className={config.totalNumbers === n ? "is-active" : ""} onClick={() => update("totalNumbers", n)}>{n}</button>
-                ))}
+            {config.numberMode === "bicho" && (
+              <div className="editor-callout editor-callout--violet">
+                <strong>Modo ativo</strong>
+                <p>Salve o sorteio para aplicar o Jogo do Bicho na página pública.</p>
               </div>
+            )}
+            <div className="editor-field">
+              <label className="editor-switch-row editor-switch-row--block">
+                <span>
+                  <strong>Modo Jogo do Bicho</strong>
+                  <small style={{ display: "block", fontWeight: 400, opacity: 0.75, marginTop: "0.25rem" }}>
+                    25 bichos · dezenas de 01 a 00 · grade vertical
+                  </small>
+                </span>
+                <input
+                  type="checkbox"
+                  checked={config.numberMode === "bicho"}
+                  onChange={(e) => {
+                    onChange({
+                      ...config,
+                      numberMode: e.target.checked ? "bicho" : "standard",
+                      totalNumbers: e.target.checked ? BICHO_TOTAL_NUMBERS : config.totalNumbers || 100,
+                    });
+                  }}
+                />
+              </label>
+            </div>
+            <div className="editor-field">
+              <label className="editor-field__label">
+                {config.numberMode === "bicho"
+                  ? `Quantidade de dezenas: ${BICHO_TOTAL_NUMBERS} (fixo)`
+                  : `Quantidade de Números: ${config.totalNumbers || 100}`}
+              </label>
+              {config.numberMode !== "bicho" && (
+                <>
+                  <input type="range" min={10} max={1000} step={5} value={config.totalNumbers || 100} onChange={(e) => update("totalNumbers", Number(e.target.value))} className="editor-slider" />
+                  <div className="editor-presets">
+                    {NUMBER_PRESETS.map((n) => (
+                      <button key={n} type="button" className={config.totalNumbers === n ? "is-active" : ""} onClick={() => update("totalNumbers", n)}>{n}</button>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
             <div className="editor-field">
               <label className="editor-field__label">Preço por Número (R$)</label>
@@ -316,8 +379,49 @@ export default function EditorSidebar({ config, onChange }) {
             </div>
             <div className="editor-field">
               <label className="editor-field__label">Número Vencedor</label>
-              <input className="editor-field__input" type="number" min="1" max={config.totalNumbers || 100} value={config.winnerNumber ?? ""} onChange={(e) => update("winnerNumber", parseInt(e.target.value, 10) || undefined)} placeholder="Ex: 042" />
+              <input
+                className="editor-field__input"
+                type="number"
+                min={config.numberMode === "bicho" ? 0 : 1}
+                max={config.numberMode === "bicho" ? 99 : config.totalNumbers || 100}
+                value={config.winnerNumber ?? ""}
+                onChange={(e) => {
+                  const raw = e.target.value;
+                  if (!raw) {
+                    onChange({ ...config, winnerNumber: undefined, winnerAnimal: "" });
+                    return;
+                  }
+                  const num = parseInt(raw, 10);
+                  onChange({
+                    ...config,
+                    winnerNumber: num,
+                    winnerAnimal: config.numberMode === "bicho" ? getAnimalLabel(num) : config.winnerAnimal,
+                  });
+                }}
+                placeholder={config.numberMode === "bicho" ? "Ex: 42 ou 00" : "Ex: 042"}
+              />
+              {config.numberMode === "bicho" && config.winnerAnimal && (
+                <p className="editor-field__hint">Bicho sorteado: {config.winnerAnimal}</p>
+              )}
             </div>
+            {config.numberMode === "bicho" && (
+              <div className="editor-field">
+                <label className="editor-field__label">Roleta do Jogo do Bicho</label>
+                <p className="editor-field__hint">Gire para sortear a dezena e o bicho vencedor automaticamente.</p>
+                <JogoDoBichoRoller
+                  primaryColor={primary}
+                  initialNumber={config.winnerNumber}
+                  compact
+                  onResult={({ number, animal, label }) => {
+                    onChange({
+                      ...config,
+                      winnerNumber: number,
+                      winnerAnimal: label,
+                    });
+                  }}
+                />
+              </div>
+            )}
             <div className="editor-field">
               <label className="editor-field__label">Nome do Ganhador</label>
               <input className="editor-field__input" value={config.winnerName || ""} onChange={(e) => update("winnerName", e.target.value)} placeholder="Nome do ganhador" />

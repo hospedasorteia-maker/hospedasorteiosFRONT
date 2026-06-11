@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import QRCode from "qrcode";
 import { fmtCurrency } from "@/lib/raffles";
+import { formatBichoNumber } from "@/lib/jogoDoBicho";
 
 export default function PixPaymentModal({
   open,
@@ -10,13 +12,19 @@ export default function PixPaymentModal({
   onConfirm,
   pixPayload,
   amount,
-  numbers,
+  numbers = [],
   raffleTitle,
   primaryColor = "#7C3AED",
+  isBicho = false,
 }) {
+  const [mounted, setMounted] = useState(false);
   const [qrDataUrl, setQrDataUrl] = useState("");
   const [copied, setCopied] = useState(false);
   const [expiresIn, setExpiresIn] = useState(900);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!open || !pixPayload) {
@@ -52,7 +60,16 @@ export default function PixPaymentModal({
     return () => clearInterval(timer);
   }, [open]);
 
-  if (!open) return null;
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
+  if (!open || !mounted) return null;
 
   function handleCopy() {
     navigator.clipboard.writeText(pixPayload);
@@ -68,10 +85,10 @@ export default function PixPaymentModal({
 
   const numbersLabel = numbers
     .slice(0, 12)
-    .map((n) => String(n).padStart(String(numbers[numbers.length - 1] || 0).length, "0"))
+    .map((n) => (isBicho ? formatBichoNumber(n) : String(n).padStart(2, "0")))
     .join(", ");
 
-  return (
+  return createPortal(
     <div className="pix-modal" role="dialog" aria-modal="true" aria-labelledby="pix-modal-title">
       <div className="pix-modal__backdrop" onClick={onClose} aria-hidden="true" />
 
@@ -90,11 +107,11 @@ export default function PixPaymentModal({
         </div>
 
         <div className="pix-modal__amount" style={{ color: primaryColor }}>
-          R$ {fmtCurrency(amount)}
+          {amount > 0 ? `R$ ${fmtCurrency(amount)}` : "Grátis"}
         </div>
 
         <p className="pix-modal__subtitle">
-          {numbers.length} número(s) — {raffleTitle}
+          {numbers.length} {isBicho ? "dezena(s)" : "número(s)"} — {raffleTitle}
         </p>
 
         <div className="pix-modal__numbers">
@@ -140,6 +157,7 @@ export default function PixPaymentModal({
           <button
             type="button"
             className="btn btn--violet"
+            style={{ backgroundColor: primaryColor, borderColor: primaryColor }}
             disabled={expiresIn === 0}
             onClick={onConfirm}
           >
@@ -147,6 +165,7 @@ export default function PixPaymentModal({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

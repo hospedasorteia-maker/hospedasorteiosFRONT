@@ -1,7 +1,9 @@
 "use client";
 
 import { formatDrawDate, fmtCurrency } from "@/lib/raffles";
+import { isBichoMode } from "@/lib/jogoDoBicho";
 import EditorNumberGridPreview from "./EditorNumberGridPreview";
+import JogoDoBichoGrid from "../JogoDoBichoGrid";
 
 const CARD_STYLES = {
   modern: "editor-preview-card--modern",
@@ -47,7 +49,7 @@ export default function EditorRafflePreview({ config }) {
         )}
         <span style={{ backgroundColor: `${colors.secondary}15`, color: colors.secondary }}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="4" y1="9" x2="20" y2="9" /><line x1="4" y1="15" x2="20" y2="15" /><line x1="10" y1="3" x2="8" y2="21" /><line x1="16" y1="3" x2="14" y2="21" /></svg>
-          {config.totalNumbers || 100} números
+          {isBichoMode(config) ? "Jogo do Bicho · 100 dezenas" : `${config.totalNumbers || 100} números`}
         </span>
         {config.price > 0 && (
           <span style={{ backgroundColor: `${colors.accent}25`, color: colors.text || "#1E1B4B" }}>
@@ -55,6 +57,29 @@ export default function EditorRafflePreview({ config }) {
           </span>
         )}
       </div>
+    );
+  }
+
+  function renderGrid() {
+    if (isBichoMode(config)) {
+      return (
+        <div className="editor-preview-bicho">
+          <JogoDoBichoGrid
+            readOnly
+            pricePerNumber={config.price || 0}
+            primaryColor={colors.primary || "#7C3AED"}
+            soldNumbers={[1, 5, 17]}
+            reservedNumbers={[42]}
+          />
+        </div>
+      );
+    }
+    return (
+      <EditorNumberGridPreview
+        totalNumbers={config.totalNumbers}
+        colors={colors}
+        pricePerNumber={config.price}
+      />
     );
   }
 
@@ -86,11 +111,7 @@ export default function EditorRafflePreview({ config }) {
             </div>
           </div>
         )}
-        <EditorNumberGridPreview
-          totalNumbers={config.totalNumbers}
-          colors={colors}
-          pricePerNumber={config.price}
-        />
+        {renderGrid()}
       </div>
     );
   }
@@ -134,11 +155,7 @@ export default function EditorRafflePreview({ config }) {
               {config.description}
             </p>
           )}
-          <EditorNumberGridPreview
-            totalNumbers={config.totalNumbers}
-            colors={colors}
-            pricePerNumber={config.price}
-          />
+          {renderGrid()}
         </div>
       </div>
     );

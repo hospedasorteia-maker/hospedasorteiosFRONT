@@ -1,12 +1,34 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { getBuyerProfile } from "@/lib/purchases";
+import { formatBichoNumber } from "@/lib/jogoDoBicho";
 
-export default function BuyerInfoModal({ open, onClose, onSubmit, primaryColor = "#7C3AED", numbersCount = 0, amount = 0 }) {
+function formatNumbersLabel(numbers, isBicho) {
+  if (!numbers?.length) return "";
+  if (isBicho) return numbers.map((n) => formatBichoNumber(n)).join(", ");
+  return numbers.join(", ");
+}
+
+export default function BuyerInfoModal({
+  open,
+  onClose,
+  onSubmit,
+  primaryColor = "#7C3AED",
+  numbersCount = 0,
+  amount = 0,
+  numbers = [],
+  isBicho = false,
+}) {
+  const [mounted, setMounted] = useState(false);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [cpf, setCpf] = useState("");
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -18,21 +40,35 @@ export default function BuyerInfoModal({ open, onClose, onSubmit, primaryColor =
     }
   }, [open]);
 
-  if (!open) return null;
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
+  if (!open || !mounted) return null;
 
   function handleSubmit(e) {
     e.preventDefault();
     onSubmit({ name: name.trim(), phone: phone.trim(), cpf: cpf.trim() });
   }
 
-  return (
-    <div className="buyer-modal" role="dialog" aria-modal="true">
+  const numbersLabel = formatNumbersLabel(numbers, isBicho);
+
+  return createPortal(
+    <div className="buyer-modal" role="dialog" aria-modal="true" aria-labelledby="buyer-modal-title">
       <div className="buyer-modal__backdrop" onClick={onClose} aria-hidden="true" />
 
       <div className="buyer-modal__panel">
         <div className="buyer-modal__head">
-          <h2>Seus dados</h2>
-          <p>Informe seus dados para reservar {numbersCount} número(s)</p>
+          <h2 id="buyer-modal-title">Seus dados</h2>
+          <p>Informe seus dados para reservar {numbersCount} {isBicho ? "dezena(s)" : "número(s)"}</p>
+          {numbersLabel && (
+            <p className="buyer-modal__numbers">{numbersLabel}</p>
+          )}
         </div>
 
         <form className="buyer-modal__form" onSubmit={handleSubmit}>
@@ -51,18 +87,24 @@ export default function BuyerInfoModal({ open, onClose, onSubmit, primaryColor =
             <input id="buyer-cpf" required value={cpf} onChange={(e) => setCpf(e.target.value)} placeholder="000.000.000-00" />
           </div>
 
-          {amount > 0 && (
-            <p className="buyer-modal__total">
-              Total: <strong style={{ color: primaryColor }}>R$ {amount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</strong>
-            </p>
-          )}
+          <p className="buyer-modal__total">
+            Total:{" "}
+            <strong style={{ color: primaryColor }}>
+              {amount > 0
+                ? `R$ ${amount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`
+                : "Grátis"}
+            </strong>
+          </p>
 
           <div className="buyer-modal__actions">
             <button type="button" className="btn btn--outline" onClick={onClose}>Voltar</button>
-            <button type="submit" className="btn btn--violet">Continuar para PIX</button>
+            <button type="submit" className="btn btn--violet" style={{ backgroundColor: primaryColor, borderColor: primaryColor }}>
+              Continuar para PIX
+            </button>
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
