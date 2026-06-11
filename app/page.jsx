@@ -4,7 +4,6 @@ import Stats from "@/components/Stats";
 import Features from "@/components/Features";
 import HowItWorks from "@/components/HowItWorks";
 import Plans from "@/components/Plans";
-import Testimonials from "@/components/Testimonials";
 import Support from "@/components/Support";
 import CtaFinal from "@/components/CtaFinal";
 import Footer from "@/components/Footer";
@@ -21,7 +20,6 @@ export default function Home() {
         <Features />
         <HowItWorks />
         <Plans />
-        <Testimonials />
         <Support />
         <CtaFinal />
       </main>

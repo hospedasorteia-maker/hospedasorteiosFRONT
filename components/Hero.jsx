@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { HeroLogo } from "./BrandLogo";
 
 export default function Hero() {
   return (
@@ -11,22 +12,24 @@ export default function Hero() {
       </div>
 
       <div className="container hero__content">
+        <HeroLogo />
+
         <span className="hero__badge reveal">
-          ✦ Plataforma #1 de rifas online no Brasil
+          ✦ Plataforma #1 de sorteios online no Brasil
         </span>
 
         <h1 className="hero__title reveal">
-          Crie rifas que <span className="text-gradient">vendem de verdade</span>
+          Crie sorteios que <span className="text-gradient">vendem de verdade</span>
         </h1>
 
         <p className="hero__text reveal">
-          Plataforma completa para criar, divulgar e gerenciar suas rifas online.
+          Plataforma completa para criar, divulgar e gerenciar seus sorteios online.
           Sorteios transparentes, pagamentos seguros e painel intuitivo.
         </p>
 
         <div className="hero__actions reveal">
           <Link href="/cadastro" className="btn btn--gradient btn--lg">
-            Criar minha primeira rifa
+            Criar meu primeiro sorteio
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
           </Link>
           <a href="#como-funciona" className="btn btn--outline-light btn--lg">

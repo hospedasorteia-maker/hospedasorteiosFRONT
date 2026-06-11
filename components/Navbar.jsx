@@ -23,7 +23,7 @@ export default function Navbar() {
       id="navbar"
     >
       <div className="container navbar__inner">
-        <BrandLogo />
+        <BrandLogo prominent />
 
         <nav className="navbar__links">
           <a href="#funcionalidades">Funcionalidades</a>

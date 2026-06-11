@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import BrandLogo from "@/components/BrandLogo";
 import { initSettingsAppearance } from "@/lib/settings";
 import { signOut } from "@/lib/auth";
 import { getPageTitle, NAV_SECTIONS, NAV_BOTTOM, isActive } from "./navConfig";
@@ -94,10 +95,7 @@ export default function AppShell({ children }) {
     <div className="app">
       <aside className={`sidebar${sidebarOpen ? " is-open" : ""}`}>
         <div className="sidebar__logo">
-          <Link href="/dashboard" className="brand">
-            <span className="brand__icon">{ICONS.brand}</span>
-            <span className="brand__name">RifaMaster</span>
-          </Link>
+          <BrandLogo prominent />
         </div>
 
         <nav className="sidebar__nav">
