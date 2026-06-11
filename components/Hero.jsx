@@ -1,5 +1,37 @@
 import Link from "next/link";
-import { HeroLogo } from "./BrandLogo";
+
+const SYSTEM_INFO = [
+  {
+    title: "Painel completo",
+    text: "Crie campanhas, edite números, cores e prêmios em um só lugar.",
+    icon: "📊",
+  },
+  {
+    title: "PIX automático",
+    text: "Receba pagamentos na hora com confirmação e reserva de números.",
+    icon: "⚡",
+  },
+  {
+    title: "Página pública",
+    text: "Link exclusivo para divulgar no WhatsApp, Instagram e grupos.",
+    icon: "🔗",
+  },
+  {
+    title: "Jogo do Bicho",
+    text: "Modo integrado com 25 bichos, 100 dezenas e resultado oficial.",
+    icon: "🎯",
+  },
+  {
+    title: "Relatórios ao vivo",
+    text: "Acompanhe vendas, receita, participantes e desempenho da campanha.",
+    icon: "📈",
+  },
+  {
+    title: "Sorteio seguro",
+    text: "Processo transparente com certificado e histórico do resultado.",
+    icon: "🛡️",
+  },
+];
 
 export default function Hero() {
   return (
@@ -16,7 +48,6 @@ export default function Hero() {
               key={`particle-${i}`}
               className="hero__particle"
               style={{
-                "--particle-i": i,
                 "--particle-x": `${8 + ((i * 41) % 84)}%`,
                 "--particle-y": `${6 + ((i * 29) % 88)}%`,
                 "--particle-size": `${3 + (i % 4)}px`,
@@ -28,24 +59,37 @@ export default function Hero() {
       </div>
 
       <div className="container hero__content">
-        <HeroLogo />
-
-        <span className="hero__badge reveal">
-          ✦ Plataforma #1 de sorteios online no Brasil
+        <span className="hero__badge">
+          ✦ A plataforma feita para quem quer vender números e sortear com confiança
         </span>
 
-        <h1 className="hero__title reveal">
-          Crie sorteios que <span className="text-gradient">vendem de verdade</span>
+        <h1 className="hero__title">
+          Lance seu sorteio online e <span className="text-gradient">comece a arrecadar agora</span>
         </h1>
 
-        <p className="hero__text reveal">
-          Plataforma completa para criar, divulgar e gerenciar seus sorteios online.
-          Sorteios transparentes, pagamentos seguros e painel intuitivo.
+        <p className="hero__text">
+          Crie campanhas profissionais em poucos cliques, receba via PIX automaticamente
+          e acompanhe tudo em um painel simples. Sem planilha, sem dor de cabeça.
         </p>
 
-        <div className="hero__actions reveal">
+        <div className="hero__info">
+          <p className="hero__info-label">O que você encontra no RifaMaster</p>
+          <div className="hero__info-grid">
+            {SYSTEM_INFO.map((item) => (
+              <article className="hero__info-card" key={item.title}>
+                <span className="hero__info-icon" aria-hidden>{item.icon}</span>
+                <div>
+                  <strong>{item.title}</strong>
+                  <p>{item.text}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+
+        <div className="hero__actions">
           <Link href="/cadastro" className="btn btn--gradient btn--lg">
-            Criar meu primeiro sorteio
+            Quero criar meu sorteio grátis
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
           </Link>
           <a href="#como-funciona" className="btn btn--outline-light btn--lg">
@@ -54,11 +98,11 @@ export default function Hero() {
           </a>
         </div>
 
-        <div className="hero__trust reveal">
-          <span><i className="check"></i> Sem taxa de cadastro</span>
-          <span><i className="check"></i> Pagamento via PIX</span>
-          <span><i className="check"></i> Sorteio ao vivo</span>
-          <span><i className="check"></i> Suporte 24h</span>
+        <div className="hero__trust">
+          <span><i className="check"></i> Cadastro gratuito</span>
+          <span><i className="check"></i> Sem cartão para começar</span>
+          <span><i className="check"></i> Jogo do Bicho integrado</span>
+          <span><i className="check"></i> Suporte humano</span>
         </div>
       </div>
 

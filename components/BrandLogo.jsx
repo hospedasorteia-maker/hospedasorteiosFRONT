@@ -28,19 +28,3 @@ export default function BrandLogo({ footer = false, prominent = false, showTag =
     </Link>
   );
 }
-
-export function HeroLogo() {
-  return (
-    <div className="hero__logo reveal">
-      <div className="hero__logo-glow" aria-hidden />
-      <img
-        src={LOGO_SRC}
-        alt="RifaMaster"
-        width={320}
-        height={320}
-        className="hero__logo-image"
-        decoding="async"
-      />
-    </div>
-  );
-}

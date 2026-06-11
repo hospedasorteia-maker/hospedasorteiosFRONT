@@ -33,9 +33,46 @@ function SectionTitle({ title, sub }) {
 }
 
 const METHODS = [
-  { id: "pix", name: "PIX", short: "PIX", color: "emerald" },
-  { id: "cartao", name: "Cartão", short: "Cartão", color: "sky" },
-  { id: "boleto", name: "Boleto", short: "Boleto", color: "amber" },
+  {
+    id: "pix",
+    name: "PIX",
+    short: "PIX",
+    color: "emerald",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="7" height="7" rx="1" />
+        <rect x="14" y="3" width="7" height="7" rx="1" />
+        <rect x="3" y="14" width="7" height="7" rx="1" />
+        <path d="M14 14h.01M17 14h.01M20 14h.01M14 17h.01M17 17h.01M20 17h.01M14 20h.01M17 20h.01M20 20h.01" />
+      </svg>
+    ),
+  },
+  {
+    id: "cartao",
+    name: "Cartão",
+    short: "Cartão",
+    color: "sky",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect width="20" height="14" x="2" y="5" rx="2" />
+        <line x1="2" y1="10" x2="22" y2="10" />
+      </svg>
+    ),
+  },
+  {
+    id: "boleto",
+    name: "Boleto",
+    short: "Boleto",
+    color: "amber",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
+        <line x1="8" y1="13" x2="16" y2="13" />
+        <line x1="8" y1="17" x2="13" y2="17" />
+      </svg>
+    ),
+  },
 ];
 
 const GATEWAYS = [
@@ -96,8 +133,8 @@ export default function PaymentContent() {
         {METHODS.map((m) => {
           const on = m.id === "pix" ? payment.pixEnabled : m.id === "cartao" ? payment.cartaoEnabled : payment.boletoEnabled;
           return (
-            <div key={m.id} className={`payment-settings__status-card${on ? " is-active" : ""}`}>
-              <span className={`payment-settings__status-icon payment-settings__status-icon--${m.color}`}>{m.short[0]}</span>
+            <div key={m.id} className={`payment-settings__status-card payment-settings__status-card--${m.color}${on ? " is-active" : ""}`}>
+              <span className={`payment-settings__status-icon payment-settings__status-icon--${m.color}`}>{m.icon}</span>
               <p>{m.short}</p>
               <span className={`settings-badge ${on ? "settings-badge--green" : ""}`}>{on ? "Ativo" : "Inativo"}</span>
             </div>
