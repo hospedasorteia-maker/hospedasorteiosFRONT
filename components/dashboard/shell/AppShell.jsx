@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { initSettingsAppearance } from "@/lib/settings";
+import { signOut } from "@/lib/auth";
 import { getPageTitle, NAV_SECTIONS, NAV_BOTTOM, isActive } from "./navConfig";
 
 const ICONS = {
@@ -40,6 +41,7 @@ const ICONS = {
 };
 
 function NavLink({ item, pathname, onNavigate }) {
+  const router = useRouter();
   const active = isActive(pathname, item);
   const classes = [
     "nav-item",
@@ -48,6 +50,22 @@ function NavLink({ item, pathname, onNavigate }) {
     item.logout ? "nav-item--logout" : "",
     active ? "nav-item--active" : "",
   ].filter(Boolean).join(" ");
+
+  function handleLogout(e) {
+    e.preventDefault();
+    signOut();
+    onNavigate?.();
+    router.push("/");
+  }
+
+  if (item.logout) {
+    return (
+      <a href="/" className={classes} onClick={handleLogout}>
+        {ICONS[item.icon]}
+        {item.label}
+      </a>
+    );
+  }
 
   return (
     <Link href={item.href} className={classes} onClick={onNavigate}>

@@ -40,7 +40,7 @@ export const NAV_SECTIONS = [
     label: "Conta",
     items: [
       { href: "/dashboard/configuracoes", label: "Configurações", match: "config", icon: "settings" },
-      { href: "/dashboard/configuracoes/pagamento", label: "Meios de pagamento", sub: true, icon: "payment" },
+      { href: "/dashboard/configuracoes/pagamento", label: "Pagamentos", sub: true, icon: "payment" },
     ],
   },
 ];
@@ -48,7 +48,7 @@ export const NAV_SECTIONS = [
 export const NAV_BOTTOM = [
   { href: "/dashboard/ajuda", label: "Central de ajuda", icon: "help" },
   { href: "/dashboard/suporte", label: "Suporte", icon: "support" },
-  { href: "/login", label: "Sair", icon: "logout", logout: true },
+  { href: "/", label: "Sair", icon: "logout", logout: true },
 ];
 
 export { isActive };

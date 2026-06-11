@@ -16,7 +16,8 @@ import { getSupportSettings } from "@/lib/settings";
 import { buildWhatsAppHref } from "@/lib/support";
 import NumberGrid from "./NumberGrid";
 import JogoDoBichoGrid from "./JogoDoBichoGrid";
-import { isBichoMode, getAnimalLabel } from "@/lib/jogoDoBicho";
+import { isBichoMode, getAnimalLabel, BICHO_DRAW_URL } from "@/lib/jogoDoBicho";
+import BichoDrawSourceLink from "./BichoDrawSourceLink";
 import PixPaymentModal from "./PixPaymentModal";
 import BuyerInfoModal from "./BuyerInfoModal";
 import MinhaCompra from "./MinhaCompra";
@@ -282,14 +283,20 @@ export default function RifaPublica() {
           </div>
         )}
 
+        {isBichoMode(raffle) && (
+          <div className="rifa-publica__card">
+            <BichoDrawSourceLink primaryColor={primary} />
+          </div>
+        )}
+
         <div className="rifa-publica__card">
           <div className="rifa-publica__grid-head">
             <p>{isBichoMode(raffle) ? "Escolha seu bicho e dezena" : "Escolha seus números"}</p>
-          <span>
+            <span>
               {isBichoMode(raffle)
                 ? "Toque no bicho, escolha a dezena e continue a compra."
                 : "Toque para selecionar. Quanto mais números, maiores as chances."}
-          </span>
+            </span>
           </div>
           {isBichoMode(raffle) ? (
             <JogoDoBichoGrid
@@ -320,6 +327,15 @@ export default function RifaPublica() {
               {raffle.winnerAnimal || getAnimalLabel(raffle.winnerNumber)}
             </h3>
             {raffle.winnerName && <p>Ganhador: {raffle.winnerName}</p>}
+            <a
+              href={BICHO_DRAW_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bicho-draw-source__link"
+              style={{ marginTop: "0.75rem", borderColor: `${primary}40`, color: primary }}
+            >
+              Conferir no Lotodobicho
+            </a>
           </div>
         )}
 

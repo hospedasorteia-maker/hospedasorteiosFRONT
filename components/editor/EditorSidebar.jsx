@@ -6,6 +6,7 @@ import EditorImagePositionSelector from "./EditorImagePositionSelector";
 import EditorCardStyleSelector from "./EditorCardStyleSelector";
 import JogoDoBichoRoller from "../JogoDoBichoRoller";
 import { BICHO_TOTAL_NUMBERS, getAnimalLabel } from "@/lib/jogoDoBicho";
+import BichoDrawSourceLink from "../BichoDrawSourceLink";
 
 const NUMBER_PRESETS = [25, 50, 100, 150, 200, 300, 500, 1000];
 
@@ -406,8 +407,13 @@ export default function EditorSidebar({ config, onChange, titleError = false, fo
             </div>
             {config.numberMode === "bicho" && (
               <div className="editor-field">
+                <BichoDrawSourceLink variant="editor" />
+              </div>
+            )}
+            {config.numberMode === "bicho" && (
+              <div className="editor-field">
                 <label className="editor-field__label">Roleta do Jogo do Bicho</label>
-                <p className="editor-field__hint">Gire para sortear a dezena e o bicho vencedor automaticamente.</p>
+                <p className="editor-field__hint">Use apenas para simular. O resultado oficial vem do Lotodobicho (Rio).</p>
                 <JogoDoBichoRoller
                   primaryColor={primary}
                   initialNumber={config.winnerNumber}

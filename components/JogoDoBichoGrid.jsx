@@ -53,47 +53,43 @@ export default function JogoDoBichoGrid({
 
   return (
     <>
-      <div className="bicho-grid">
+      <div className="number-grid bicho-grid">
         <div className="bicho-grid__head">
           <p>Escolha o bicho</p>
           <span>Toque no animal, selecione a dezena e clique em <strong>Continuar</strong></span>
         </div>
 
-        <div className="bicho-grid__animals number-grid__cells">
+        <div className="number-grid__cells bicho-grid__animals">
           {BICHO_ANIMALS.map((animal) => {
             const nums = getNumbersForGroup(animal.id);
             const soldInGroup = nums.filter((n) => confirmedSet.has(n)).length;
             const pickedInGroup = nums.filter((n) => selected.includes(n)).length;
             const isActive = activeGroup === animal.id;
             const allSold = soldInGroup === 4;
+            const label = `${animal.emoji} ${animal.name}`;
 
             return (
               <button
                 key={animal.id}
                 type="button"
                 disabled={allSold && !readOnly}
-                className={`bicho-grid__animal number-grid__cell${isActive ? " is-selected" : ""}${pickedInGroup > 0 ? " has-picked" : ""}${allSold ? " is-sold" : ""}`}
-                style={isActive ? { backgroundColor: primaryColor, borderColor: primaryColor, color: "#fff" } : undefined}
+                className={`number-grid__cell bicho-grid__animal${isActive ? " is-selected" : ""}${pickedInGroup > 0 ? " has-picked" : ""}${allSold ? " is-sold" : ""}`}
+                style={isActive ? { backgroundColor: primaryColor, borderColor: primaryColor } : undefined}
                 onClick={() => setActiveGroup(animal.id)}
-                title={allSold ? "Grupo esgotado" : animal.name}
+                title={allSold ? `${label} — esgotado` : label}
+                aria-label={label}
               >
-                <span className="bicho-grid__animal-group">{String(animal.id).padStart(2, "0")}</span>
-                <span className="bicho-grid__animal-emoji" aria-hidden>{animal.emoji}</span>
-                <span className="bicho-grid__animal-name">{animal.name}</span>
+                {animal.emoji}
               </button>
             );
           })}
         </div>
 
         {activeAnimal && (
-          <div className="bicho-grid__numbers">
-            <div className="bicho-grid__numbers-head">
-              <span className="bicho-grid__numbers-emoji" aria-hidden>{activeAnimal.emoji}</span>
-              <div>
-                <strong>{activeAnimal.name}</strong>
-                <p>Grupo {String(activeAnimal.id).padStart(2, "0")} · escolha a dezena</p>
-              </div>
-            </div>
+          <>
+            <p className="bicho-grid__dezenas-label">
+              {activeAnimal.emoji} {activeAnimal.name} · grupo {String(activeAnimal.id).padStart(2, "0")}
+            </p>
             <div className="number-grid__cells bicho-grid__dezenas">
               {groupNumbers.map((n) => {
                 const confirmed = confirmedSet.has(n);
@@ -116,7 +112,7 @@ export default function JogoDoBichoGrid({
                 );
               })}
             </div>
-          </div>
+          </>
         )}
 
         {selected.length > 0 && (
