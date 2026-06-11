@@ -1,4 +1,5 @@
 import Link from "next/link";
+import HeroPreview from "./HeroPreview";
 
 const SYSTEM_INFO = [
   {
@@ -72,21 +73,6 @@ export default function Hero() {
           e acompanhe tudo em um painel simples. Sem planilha, sem dor de cabeça.
         </p>
 
-        <div className="hero__info">
-          <p className="hero__info-label">O que você encontra no RifaMaster</p>
-          <div className="hero__info-grid">
-            {SYSTEM_INFO.map((item) => (
-              <article className="hero__info-card" key={item.title}>
-                <span className="hero__info-icon" aria-hidden>{item.icon}</span>
-                <div>
-                  <strong>{item.title}</strong>
-                  <p>{item.text}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-
         <div className="hero__actions">
           <Link href="/cadastro" className="btn btn--gradient btn--lg">
             Quero criar meu sorteio grátis
@@ -103,6 +89,23 @@ export default function Hero() {
           <span><i className="check"></i> Sem cartão para começar</span>
           <span><i className="check"></i> Jogo do Bicho integrado</span>
           <span><i className="check"></i> Suporte humano</span>
+        </div>
+
+        <HeroPreview />
+
+        <div className="hero__info">
+          <p className="hero__info-label">O que você encontra no RifaMaster</p>
+          <div className="hero__info-grid">
+            {SYSTEM_INFO.map((item) => (
+              <article className="hero__info-card" key={item.title}>
+                <span className="hero__info-icon" aria-hidden>{item.icon}</span>
+                <div>
+                  <strong>{item.title}</strong>
+                  <p>{item.text}</p>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
 

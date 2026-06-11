@@ -1,4 +1,5 @@
 import "./globals.css";
+import "./premium.css";
 
 export const metadata = {
   title: "RifaMaster — Crie rifas que vendem de verdade",

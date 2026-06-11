@@ -16,7 +16,6 @@ export function getPageTitle(pathname) {
 function isActive(pathname, item) {
   if (item.match === "exact") return pathname === item.href;
   if (item.match === "editor") return pathname.startsWith("/dashboard/editor");
-  if (item.match === "config") return pathname.startsWith("/dashboard/configuracoes");
   if (item.sub) return pathname === item.href;
   return pathname === item.href || pathname.startsWith(`${item.href}/`);
 }
@@ -39,7 +38,7 @@ export const NAV_SECTIONS = [
   {
     label: "Conta",
     items: [
-      { href: "/dashboard/configuracoes", label: "Configurações", match: "config", icon: "settings" },
+      { href: "/dashboard/configuracoes", label: "Configurações", match: "exact", icon: "settings" },
       { href: "/dashboard/configuracoes/pagamento", label: "Pagamentos", sub: true, icon: "payment" },
     ],
   },
