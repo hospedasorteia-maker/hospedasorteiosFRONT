@@ -3,9 +3,7 @@
 import { useEffect } from "react";
 
 /**
- * Replica os efeitos do antigo js/script.js:
- * - animação "reveal" ao rolar
- * - contadores animados da seção de stats
+ * Efeitos visuais globais: reveal, contadores, spotlight e stagger.
  */
 export default function ScrollEffects() {
   useEffect(() => {
@@ -18,14 +16,20 @@ export default function ScrollEffects() {
           }
         });
       },
-      { threshold: 0.15 }
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
     );
 
     document.querySelectorAll(".reveal").forEach((el) => revealObserver.observe(el));
 
+    document.querySelectorAll(".reveal-stagger").forEach((group) => {
+      group.querySelectorAll(".reveal").forEach((el, index) => {
+        el.style.setProperty("--reveal-delay", `${Math.min(index * 0.08, 0.48)}s`);
+      });
+    });
+
     function animateCounter(el) {
       const target = parseInt(el.dataset.target, 10);
-      const step = Math.ceil(target / 60);
+      const step = Math.max(1, Math.ceil(target / 60));
       let current = 0;
 
       const timer = setInterval(() => {
@@ -52,9 +56,29 @@ export default function ScrollEffects() {
 
     document.querySelectorAll(".counter").forEach((el) => counterObserver.observe(el));
 
+    const hero = document.querySelector(".hero");
+    let spotlight = null;
+    let onMove = null;
+
+    if (hero && window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
+      spotlight = document.createElement("div");
+      spotlight.className = "fx-spotlight";
+      hero.appendChild(spotlight);
+
+      onMove = (event) => {
+        const rect = hero.getBoundingClientRect();
+        spotlight.style.setProperty("--fx-x", `${event.clientX - rect.left}px`);
+        spotlight.style.setProperty("--fx-y", `${event.clientY - rect.top}px`);
+      };
+
+      hero.addEventListener("mousemove", onMove);
+    }
+
     return () => {
       revealObserver.disconnect();
       counterObserver.disconnect();
+      if (hero && onMove) hero.removeEventListener("mousemove", onMove);
+      spotlight?.remove();
     };
   }, []);
 

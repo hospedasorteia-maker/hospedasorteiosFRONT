@@ -5,10 +5,26 @@ export default function Hero() {
   return (
     <section className="hero">
       <div className="hero__bg" aria-hidden="true">
+        <div className="hero__aurora" />
         <div className="hero__blob hero__blob--1"></div>
         <div className="hero__blob hero__blob--2"></div>
         <div className="hero__blob hero__blob--3"></div>
         <div className="hero__grid"></div>
+        <div className="hero__particles">
+          {Array.from({ length: 22 }, (_, i) => (
+            <span
+              key={`particle-${i}`}
+              className="hero__particle"
+              style={{
+                "--particle-i": i,
+                "--particle-x": `${8 + ((i * 41) % 84)}%`,
+                "--particle-y": `${6 + ((i * 29) % 88)}%`,
+                "--particle-size": `${3 + (i % 4)}px`,
+                "--particle-delay": `${(i % 7) * 0.45}s`,
+              }}
+            />
+          ))}
+        </div>
       </div>
 
       <div className="container hero__content">

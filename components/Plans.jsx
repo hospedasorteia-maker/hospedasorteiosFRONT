@@ -10,7 +10,7 @@ export default function Plans() {
           <p className="section__subtitle">Sem taxas escondidas. Cancele quando quiser.</p>
         </div>
 
-        <div className="plans__grid">
+        <div className="plans__grid reveal-stagger">
           <div className="plan reveal">
             <p className="plan__name">Grátis</p>
             <div className="plan__price"><strong>R$ 0</strong><span>/mês</span></div>

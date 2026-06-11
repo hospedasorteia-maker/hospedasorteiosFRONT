@@ -63,7 +63,7 @@ export default function Features() {
           </p>
         </div>
 
-        <div className="features__grid">
+        <div className="features__grid reveal-stagger">
           {FEATURES.map((feature) => (
             <article className="feature reveal" key={feature.title}>
               <div className={`feature__icon ${feature.grad}`}>{feature.icon}</div>
