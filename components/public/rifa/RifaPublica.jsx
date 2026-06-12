@@ -320,22 +320,22 @@ export default function RifaPublica() {
           </div>
           {isBichoMode(raffle) ? (
             <JogoDoBichoGrid
+              key={selectionReset}
               pricePerNumber={raffle.price}
               primaryColor={primary}
               soldNumbers={soldNumbers}
               reservedNumbers={reservedNumbers}
-              selectionReset={selectionReset}
               playMode={raffle.bichoPlayMode || "dezena"}
               onPurchase={handlePurchase}
             />
           ) : (
             <NumberGrid
+              key={selectionReset}
               totalNumbers={total}
               pricePerNumber={raffle.price}
               primaryColor={primary}
               soldNumbers={soldNumbers}
               reservedNumbers={reservedNumbers}
-              selectionReset={selectionReset}
               onPurchase={handlePurchase}
             />
           )}

@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { fmtCurrency } from "@/lib/services/raffles";
 import {
   BICHO_ANIMALS,
@@ -20,7 +20,6 @@ export default function JogoDoBichoGrid({
   soldNumbers = [],
   reservedNumbers = [],
   onPurchase,
-  selectionReset = 0,
   readOnly = false,
   playMode = "dezena",
 }) {
@@ -32,10 +31,6 @@ export default function JogoDoBichoGrid({
   const reservedSet = toNumberSet(reservedNumbers);
   const groupNumbers = getNumbersForGroup(activeGroup);
   const activeAnimal = BICHO_ANIMALS.find((a) => a.id === activeGroup);
-
-  useEffect(() => {
-    setSelected([]);
-  }, [selectionReset]);
 
   function toggleDezena(n) {
     if (readOnly) return;

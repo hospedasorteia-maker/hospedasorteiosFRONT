@@ -56,10 +56,25 @@
 .app .brand {
   display: flex;
   align-items: center;
-  gap: 0.625rem;
+  gap: 0.875rem;
+  text-decoration: none;
+}
+
+.app .brand__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  min-width: 0;
 }
 
 .app .sidebar__logo .brand__name {
+  display: block;
+  font-family: var(--font-heading, "Space Grotesk", sans-serif);
+  font-weight: 800;
+  font-size: 1.05rem;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
   background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 55%, #9333ea 100%);
   -webkit-background-clip: text;
   background-clip: text;
@@ -67,11 +82,19 @@
 }
 
 .app .sidebar__logo .brand__tag {
+  display: block;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  white-space: nowrap;
   color: #6d28d9;
   opacity: 1;
 }
 
 .app .sidebar__logo .brand__image {
+  flex-shrink: 0;
   filter: none;
 }
 

@@ -1,8 +1,9 @@
 ﻿"use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { fmtCurrency } from "@/lib/services/raffles";
-export default function NumberGrid({ totalNumbers, pricePerNumber, primaryColor, soldNumbers = [], reservedNumbers = [], onPurchase, selectionReset = 0 }) {
+
+export default function NumberGrid({ totalNumbers, pricePerNumber, primaryColor, soldNumbers = [], reservedNumbers = [], onPurchase }) {
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const pageSize = 100;
@@ -12,10 +13,6 @@ export default function NumberGrid({ totalNumbers, pricePerNumber, primaryColor,
 
   const confirmedSet = new Set(soldNumbers);
   const reservedSet = new Set(reservedNumbers);
-
-  useEffect(() => {
-    setSelected([]);
-  }, [selectionReset]);
 
   function toggle(n) {
     if (confirmedSet.has(n) || reservedSet.has(n)) return;
