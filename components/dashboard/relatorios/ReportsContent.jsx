@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -130,7 +130,7 @@ export default function ReportsContent() {
 
   useEffect(() => {
     function onStorage(event) {
-      if (!event.key?.startsWith("rifamaster_")) return;
+      if (!event.key?.startsWith("TironiDraws_")) return;
       refresh({ silent: true });
     }
     window.addEventListener("storage", onStorage);

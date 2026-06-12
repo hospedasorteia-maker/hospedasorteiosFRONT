@@ -1,5 +1,5 @@
-/* ============================================================
-   RifaMaster — Premium SaaS Design System
+﻿/* ============================================================
+   TironiDraws — Premium SaaS Design System
    Inspiração: Stripe · Linear · Vercel · Framer · Notion
    ============================================================ */
 
@@ -716,135 +716,6 @@ body {
 }
 
 /* ============================================================
-   Dashboard premium
-   ============================================================ */
-.app {
-  background: var(--bg-deepest);
-  color: var(--text-primary);
-}
-
-.app .sidebar {
-  background: rgba(10, 10, 35, 0.92);
-  backdrop-filter: blur(20px);
-  border-right: 1px solid var(--glass-border);
-}
-
-.app .sidebar__logo {
-  border-bottom-color: var(--glass-border);
-}
-
-.sidebar__logo .brand__name {
-  background: linear-gradient(135deg, #ffffff 0%, #a855f7 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.nav-section__label {
-  color: rgba(148, 163, 184, 0.7);
-}
-
-.nav-item {
-  color: var(--text-muted);
-  border-radius: var(--radius-xl);
-  transition: all 0.2s ease;
-}
-
-.nav-item:hover {
-  background: rgba(124, 58, 237, 0.1);
-  color: var(--text-primary);
-}
-
-.nav-item--active {
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.9), rgba(59, 130, 246, 0.7));
-  box-shadow: 0 4px 16px rgba(124, 58, 237, 0.35);
-}
-
-.nav-item--active:hover {
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.95), rgba(59, 130, 246, 0.75));
-}
-
-.nav-item--highlight {
-  background: rgba(124, 58, 237, 0.12);
-  border: 1px solid rgba(124, 58, 237, 0.25);
-  color: #a855f7;
-}
-
-.nav-item--highlight:hover {
-  background: rgba(124, 58, 237, 0.18);
-}
-
-.sidebar__bottom {
-  border-top-color: var(--glass-border);
-}
-
-.plan-card {
-  background: rgba(124, 58, 237, 0.1);
-  border: 1px solid rgba(124, 58, 237, 0.25);
-  border-radius: var(--radius-xl);
-  backdrop-filter: blur(12px);
-}
-
-.plan-card__title {
-  color: var(--text-primary);
-}
-
-.plan-card__btn {
-  background: var(--grad-main);
-  border-radius: 0.625rem;
-  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.35);
-}
-
-.app .main {
-  background: var(--bg-deepest);
-}
-
-.topbar {
-  background: rgba(5, 8, 22, 0.85);
-  backdrop-filter: blur(16px);
-  border-bottom-color: var(--glass-border);
-}
-
-.topbar__title {
-  color: var(--text-primary);
-}
-
-.page-head h1 {
-  color: var(--text-primary);
-}
-
-.page-head p {
-  color: var(--text-muted);
-}
-
-.app .btn--violet {
-  background: var(--grad-main);
-  box-shadow: 0 4px 16px rgba(124, 58, 237, 0.35);
-}
-
-.app .btn--violet:hover:not(:disabled) {
-  background: linear-gradient(135deg, #8b5cf6, #3b82f6);
-  transform: translateY(-1px);
-}
-
-/* Dashboard cards */
-.raffle-card,
-.dash-card,
-.reports__kpi,
-.metric-big {
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-card);
-}
-
-.raffle-card:hover {
-  border-color: rgba(124, 58, 237, 0.35);
-  box-shadow: var(--shadow-float), 0 0 32px rgba(124, 58, 237, 0.12);
-}
-
-/* ============================================================
    Auth premium
    ============================================================ */
 .auth {
@@ -904,40 +775,6 @@ body {
   .plan:hover {
     transform: none;
   }
-}
-
-/* Dashboard — tipografia e inputs no dark */
-.app .raffle-card {
-  border-color: var(--glass-border);
-}
-
-.app .raffle-card__info h3,
-.app .metric-big__value,
-.app .metric-big h3,
-.app .dash-card h2,
-.app .dash-card h3,
-.app .reports__kpi-value,
-.app .reports__kpi-label {
-  color: var(--text-primary);
-}
-
-.app .raffle-card__stats,
-.app .raffle-card__prize,
-.app .metric-big p,
-.app .dash-card p {
-  color: var(--text-muted);
-}
-
-.app input:not([type="checkbox"]):not([type="radio"]),
-.app select,
-.app textarea {
-  background: rgba(5, 8, 22, 0.6);
-  border-color: var(--glass-border);
-  color: var(--text-primary);
-}
-
-.app .content {
-  position: relative;
 }
 
 .hero__content {

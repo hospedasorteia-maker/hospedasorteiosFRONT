@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import QRCode from "qrcode";
 import { fmtCurrency } from "@/lib/raffles";
-import { formatBichoNumber } from "@/lib/jogoDoBicho";
+import { formatBichoPurchaseLabel } from "@/lib/jogoDoBicho";
 
 export default function PixPaymentModal({
   open,
@@ -16,6 +16,7 @@ export default function PixPaymentModal({
   raffleTitle,
   primaryColor = "#7C3AED",
   isBicho = false,
+  bichoPlayMode = "dezena",
 }) {
   const [mounted, setMounted] = useState(false);
   const [qrDataUrl, setQrDataUrl] = useState("");
@@ -85,7 +86,7 @@ export default function PixPaymentModal({
 
   const numbersLabel = numbers
     .slice(0, 12)
-    .map((n) => (isBicho ? formatBichoNumber(n) : String(n).padStart(2, "0")))
+    .map((n) => (isBicho ? formatBichoPurchaseLabel(n, bichoPlayMode) : String(n).padStart(2, "0")))
     .join(", ");
 
   return createPortal(
@@ -111,7 +112,8 @@ export default function PixPaymentModal({
         </div>
 
         <p className="pix-modal__subtitle">
-          {numbers.length} {isBicho ? "dezena(s)" : "número(s)"} — {raffleTitle}
+          {numbers.length}{" "}
+          {isBicho ? (bichoPlayMode === "grupo" ? "bicho(s)" : "dezena(s)") : "número(s)"} — {raffleTitle}
         </p>
 
         <div className="pix-modal__numbers">

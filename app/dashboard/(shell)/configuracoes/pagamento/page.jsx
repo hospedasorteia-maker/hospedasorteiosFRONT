@@ -1,7 +1,7 @@
 import PaymentContent from "@/components/dashboard/configuracoes/PaymentContent";
 
 export const metadata = {
-  title: "Meios de pagamento — RifaMaster",
+  title: "Meios de pagamento — TironiDraws",
 };
 
 export default function PagamentoPage() {

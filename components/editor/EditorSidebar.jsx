@@ -5,10 +5,39 @@ import EditorColorPicker from "./EditorColorPicker";
 import EditorImagePositionSelector from "./EditorImagePositionSelector";
 import EditorCardStyleSelector from "./EditorCardStyleSelector";
 import JogoDoBichoRoller from "../JogoDoBichoRoller";
-import { BICHO_TOTAL_NUMBERS, getAnimalLabel } from "@/lib/jogoDoBicho";
+import { BICHO_TOTAL_NUMBERS, BICHO_GRUPO_TOTAL, getAnimalGroupLabel, getAnimalByGroupId, getAnimalLabel } from "@/lib/jogoDoBicho";
 import BichoDrawSourceLink from "../BichoDrawSourceLink";
 
 const NUMBER_PRESETS = [25, 50, 100, 150, 200, 300, 500, 1000];
+const PRICE_PRESETS = [0, 1, 2, 5, 10, 15, 20, 50];
+
+function parsePriceInput(raw) {
+  if (raw === "" || raw === undefined || raw === null) return 0;
+  let cleaned = String(raw).trim().replace(/[^\d,.-]/g, "");
+  if (!cleaned) return 0;
+
+  const lastComma = cleaned.lastIndexOf(",");
+  const lastDot = cleaned.lastIndexOf(".");
+
+  if (lastComma > lastDot) {
+    cleaned = cleaned.replace(/\./g, "").replace(",", ".");
+  } else if (lastDot > lastComma) {
+    cleaned = cleaned.replace(/,/g, "");
+  } else {
+    cleaned = cleaned.replace(",", ".");
+  }
+
+  const value = parseFloat(cleaned);
+  if (Number.isNaN(value) || value < 0) return 0;
+  return Math.round(value * 100) / 100;
+}
+
+function formatPriceForInput(value) {
+  return Number(value).toLocaleString("pt-BR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
 
 const SAMPLE_IMAGES = [
   "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=300&h=200&fit=crop",
@@ -54,6 +83,7 @@ export default function EditorSidebar({ config, onChange, titleError = false, fo
     maxUses: "",
     validUntil: "",
   });
+  const [priceDraft, setPriceDraft] = useState("");
 
   function update(field, value) {
     onChange({ ...config, [field]: value });
@@ -123,6 +153,10 @@ export default function EditorSidebar({ config, onChange, titleError = false, fo
       titleRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
     });
   }, [titleError, focusTitleTick]);
+
+  useEffect(() => {
+    setPriceDraft(config.price > 0 ? formatPriceForInput(config.price) : "");
+  }, [config.price]);
 
   return (
     <aside className="editor-sidebar">
@@ -201,16 +235,53 @@ export default function EditorSidebar({ config, onChange, titleError = false, fo
                     onChange({
                       ...config,
                       numberMode: e.target.checked ? "bicho" : "standard",
-                      totalNumbers: e.target.checked ? BICHO_TOTAL_NUMBERS : config.totalNumbers || 100,
+                      totalNumbers: e.target.checked
+                        ? (config.bichoPlayMode === "grupo" ? BICHO_GRUPO_TOTAL : BICHO_TOTAL_NUMBERS)
+                        : config.totalNumbers || 100,
                     });
                   }}
                 />
               </label>
             </div>
+            {config.numberMode === "bicho" && (
+              <div className="editor-field">
+                <label className="editor-field__label">Tipo de aposta</label>
+                <div className="editor-status-grid">
+                  {[
+                    { value: "dezena", label: "Dezena (100)" },
+                    { value: "grupo", label: "Só bicho (25)" },
+                  ].map(({ value, label }) => (
+                    <button
+                      key={value}
+                      type="button"
+                      className={`editor-status-btn${config.bichoPlayMode === value ? " is-selected" : ""}`}
+                      onClick={() =>
+                        onChange({
+                          ...config,
+                          bichoPlayMode: value,
+                          totalNumbers: value === "grupo" ? BICHO_GRUPO_TOTAL : BICHO_TOTAL_NUMBERS,
+                          winnerNumber: undefined,
+                          winnerAnimal: "",
+                        })
+                      }
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+                <p className="editor-field__hint">
+                  {config.bichoPlayMode === "grupo"
+                    ? "Participantes escolhem apenas o bicho. A roleta sorteia um animal, sem dezena."
+                    : "Participantes escolhem bicho e dezena (01 a 00)."}
+                </p>
+              </div>
+            )}
             <div className="editor-field">
               <label className="editor-field__label">
                 {config.numberMode === "bicho"
-                  ? `Quantidade de dezenas: ${BICHO_TOTAL_NUMBERS} (fixo)`
+                  ? config.bichoPlayMode === "grupo"
+                    ? `Quantidade de bichos: ${BICHO_GRUPO_TOTAL} (fixo)`
+                    : `Quantidade de dezenas: ${BICHO_TOTAL_NUMBERS} (fixo)`
                   : `Quantidade de Números: ${config.totalNumbers || 100}`}
               </label>
               {config.numberMode !== "bicho" && (
@@ -226,7 +297,38 @@ export default function EditorSidebar({ config, onChange, titleError = false, fo
             </div>
             <div className="editor-field">
               <label className="editor-field__label">Preço por Número (R$)</label>
-              <input className="editor-field__input" type="number" min="0" step="0.5" value={config.price ?? ""} onChange={(e) => update("price", parseFloat(e.target.value) || 0)} placeholder="0.00" />
+              <div className="editor-price-input">
+                <span>R$</span>
+                <input
+                  className="editor-field__input"
+                  type="text"
+                  inputMode="decimal"
+                  value={priceDraft}
+                  onChange={(e) => setPriceDraft(e.target.value)}
+                  onBlur={() => {
+                    const parsed = parsePriceInput(priceDraft);
+                    update("price", parsed);
+                    setPriceDraft(parsed > 0 ? formatPriceForInput(parsed) : "");
+                  }}
+                  placeholder="Digite o valor (ex: 12,50)"
+                />
+              </div>
+              <div className="editor-presets">
+                {PRICE_PRESETS.map((preset) => (
+                  <button
+                    key={preset}
+                    type="button"
+                    className={config.price === preset ? "is-active" : ""}
+                    onClick={() => {
+                      update("price", preset);
+                      setPriceDraft(preset > 0 ? formatPriceForInput(preset) : "");
+                    }}
+                  >
+                    {preset === 0 ? "Grátis" : `R$ ${formatPriceForInput(preset)}`}
+                  </button>
+                ))}
+              </div>
+              <p className="editor-field__hint">Use os atalhos ou digite qualquer valor com centavos.</p>
             </div>
             <div className="editor-field">
               <label className="editor-field__label">Data do Sorteio</label>
@@ -379,12 +481,16 @@ export default function EditorSidebar({ config, onChange, titleError = false, fo
               <p>Defina o vencedor e mude o status para <strong>Concluído</strong>. Os compradores serão notificados automaticamente por e-mail.</p>
             </div>
             <div className="editor-field">
-              <label className="editor-field__label">Número Vencedor</label>
+              <label className="editor-field__label">
+                {config.numberMode === "bicho" && config.bichoPlayMode === "grupo"
+                  ? "Bicho vencedor (grupo 1–25)"
+                  : "Número Vencedor"}
+              </label>
               <input
                 className="editor-field__input"
                 type="number"
-                min={config.numberMode === "bicho" ? 0 : 1}
-                max={config.numberMode === "bicho" ? 99 : config.totalNumbers || 100}
+                min={config.numberMode === "bicho" ? (config.bichoPlayMode === "grupo" ? 1 : 0) : 1}
+                max={config.numberMode === "bicho" ? (config.bichoPlayMode === "grupo" ? 25 : 99) : config.totalNumbers || 100}
                 value={config.winnerNumber ?? ""}
                 onChange={(e) => {
                   const raw = e.target.value;
@@ -393,13 +499,25 @@ export default function EditorSidebar({ config, onChange, titleError = false, fo
                     return;
                   }
                   const num = parseInt(raw, 10);
+                  const winnerAnimal =
+                    config.numberMode === "bicho" && config.bichoPlayMode === "grupo"
+                      ? getAnimalGroupLabel(getAnimalByGroupId(num))
+                      : config.numberMode === "bicho"
+                        ? getAnimalLabel(num)
+                        : config.winnerAnimal;
                   onChange({
                     ...config,
                     winnerNumber: num,
-                    winnerAnimal: config.numberMode === "bicho" ? getAnimalLabel(num) : config.winnerAnimal,
+                    winnerAnimal,
                   });
                 }}
-                placeholder={config.numberMode === "bicho" ? "Ex: 42 ou 00" : "Ex: 042"}
+                placeholder={
+                  config.numberMode === "bicho"
+                    ? config.bichoPlayMode === "grupo"
+                      ? "Ex: 16 (Leão)"
+                      : "Ex: 42 ou 00"
+                    : "Ex: 042"
+                }
               />
               {config.numberMode === "bicho" && config.winnerAnimal && (
                 <p className="editor-field__hint">Bicho sorteado: {config.winnerAnimal}</p>
@@ -413,10 +531,15 @@ export default function EditorSidebar({ config, onChange, titleError = false, fo
             {config.numberMode === "bicho" && (
               <div className="editor-field">
                 <label className="editor-field__label">Roleta do Jogo do Bicho</label>
-                <p className="editor-field__hint">Use apenas para simular. O resultado oficial vem do Lotodobicho (Rio).</p>
+                <p className="editor-field__hint">
+                  {config.bichoPlayMode === "grupo"
+                    ? "Modo só bicho: a roleta sorteia um animal (grupo), sem dezena."
+                    : "Use apenas para simular. O resultado oficial vem do Lotodobicho (Rio)."}
+                </p>
                 <JogoDoBichoRoller
                   primaryColor={primary}
                   initialNumber={config.winnerNumber}
+                  playMode={config.bichoPlayMode || "dezena"}
                   compact
                   onResult={({ number, animal, label }) => {
                     onChange({

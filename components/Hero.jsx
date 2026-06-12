@@ -94,7 +94,7 @@ export default function Hero() {
         <HeroPreview />
 
         <div className="hero__info">
-          <p className="hero__info-label">O que você encontra no RifaMaster</p>
+          <p className="hero__info-label">O que você encontra no TironiDraws</p>
           <div className="hero__info-grid">
             {SYSTEM_INFO.map((item) => (
               <article className="hero__info-card" key={item.title}>

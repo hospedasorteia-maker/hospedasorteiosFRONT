@@ -1,7 +1,7 @@
 import RifaPublica from "@/components/RifaPublica";
 
 export const metadata = {
-  title: "Sorteio — RifaMaster",
+  title: "Sorteio — TironiDraws",
 };
 
 export default function RifaPublicaPage() {

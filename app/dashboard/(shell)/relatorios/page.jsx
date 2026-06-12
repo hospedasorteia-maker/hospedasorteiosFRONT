@@ -1,7 +1,7 @@
 import ReportsContent from "@/components/dashboard/relatorios/ReportsContent";
 
 export const metadata = {
-  title: "Relatórios — RifaMaster",
+  title: "Relatórios — TironiDraws",
 };
 
 export default function RelatoriosPage() {

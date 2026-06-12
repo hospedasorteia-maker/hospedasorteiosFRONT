@@ -10,7 +10,7 @@ export const PAGE_TITLES = {
 
 export function getPageTitle(pathname) {
   if (pathname.startsWith("/dashboard/editor")) return "Editor de sorteio";
-  return PAGE_TITLES[pathname] || "RifaMaster";
+  return PAGE_TITLES[pathname] || "TironiDraws";
 }
 
 function isActive(pathname, item) {

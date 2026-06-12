@@ -16,7 +16,7 @@ import { getSupportSettings } from "@/lib/settings";
 import { buildWhatsAppHref } from "@/lib/support";
 import NumberGrid from "./NumberGrid";
 import JogoDoBichoGrid from "./JogoDoBichoGrid";
-import { isBichoMode, getAnimalLabel, BICHO_DRAW_URL } from "@/lib/jogoDoBicho";
+import { isBichoMode, isBichoGrupoMode, getAnimalLabel, getAnimalGroupLabel, getAnimalByGroupId, BICHO_DRAW_URL, BICHO_TOTAL_NUMBERS, BICHO_GRUPO_TOTAL } from "@/lib/jogoDoBicho";
 import BichoDrawSourceLink from "./BichoDrawSourceLink";
 import PixPaymentModal from "./PixPaymentModal";
 import BuyerInfoModal from "./BuyerInfoModal";
@@ -179,7 +179,11 @@ export default function RifaPublica() {
 
   const primary = raffle.themeColors?.primary || "#7C3AED";
   const secondary = raffle.themeColors?.secondary || "#A855F7";
-  const total = isBichoMode(raffle) ? 100 : (raffle.totalNumbers || 100);
+  const total = isBichoGrupoMode(raffle)
+    ? BICHO_GRUPO_TOTAL
+    : isBichoMode(raffle)
+      ? BICHO_TOTAL_NUMBERS
+      : (raffle.totalNumbers || 100);
   const soldCount = countOccupied(soldNumbers, reservedNumbers);
   const remaining = Math.max(0, total - soldCount);
   const progressPct = Math.min(100, Math.round((soldCount / total) * 100));
@@ -193,7 +197,7 @@ export default function RifaPublica() {
             <span className="rifa-publica__brand-icon" style={{ backgroundColor: primary }}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" /></svg>
             </span>
-            <span style={{ color: primary }}>RifaMaster</span>
+            <span style={{ color: primary }}>TironiDraws</span>
           </Link>
         </div>
         <div className="rifa-publica__header-actions">
@@ -291,11 +295,13 @@ export default function RifaPublica() {
 
         <div className="rifa-publica__card">
           <div className="rifa-publica__grid-head">
-            <p>{isBichoMode(raffle) ? "Escolha seu bicho e dezena" : "Escolha seus números"}</p>
+            <p>{isBichoMode(raffle) ? (isBichoGrupoMode(raffle) ? "Escolha seu bicho" : "Escolha seu bicho e dezena") : "Escolha seus números"}</p>
             <span>
-              {isBichoMode(raffle)
-                ? "Toque no bicho, escolha a dezena e continue a compra."
-                : "Toque para selecionar. Quanto mais números, maiores as chances."}
+              {isBichoGrupoMode(raffle)
+                ? "Toque no bicho desejado e continue a compra."
+                : isBichoMode(raffle)
+                  ? "Toque no bicho, escolha a dezena e continue a compra."
+                  : "Toque para selecionar. Quanto mais números, maiores as chances."}
             </span>
           </div>
           {isBichoMode(raffle) ? (
@@ -305,6 +311,7 @@ export default function RifaPublica() {
               soldNumbers={soldNumbers}
               reservedNumbers={reservedNumbers}
               selectionReset={selectionReset}
+              playMode={raffle.bichoPlayMode || "dezena"}
               onPurchase={handlePurchase}
             />
           ) : (
@@ -324,7 +331,10 @@ export default function RifaPublica() {
           <div className="rifa-publica__card rifa-publica__bicho-result">
             <p className="rifa-publica__label">Resultado do sorteio</p>
             <h3 style={{ color: primary }}>
-              {raffle.winnerAnimal || getAnimalLabel(raffle.winnerNumber)}
+              {raffle.winnerAnimal ||
+                (isBichoGrupoMode(raffle)
+                  ? getAnimalGroupLabel(getAnimalByGroupId(raffle.winnerNumber))
+                  : getAnimalLabel(raffle.winnerNumber))}
             </h3>
             {raffle.winnerName && <p>Ganhador: {raffle.winnerName}</p>}
             <a
@@ -348,6 +358,7 @@ export default function RifaPublica() {
           amount={pendingSelection?.amount ?? 0}
           numbers={pendingSelection?.numbers ?? []}
           isBicho={isBichoMode(raffle)}
+          bichoPlayMode={raffle.bichoPlayMode || "dezena"}
         />
 
         <PixPaymentModal
@@ -360,6 +371,7 @@ export default function RifaPublica() {
           raffleTitle={raffle.title}
           primaryColor={primary}
           isBicho={isBichoMode(raffle)}
+          bichoPlayMode={raffle.bichoPlayMode || "dezena"}
         />
 
         <div className="rifa-publica__trust">
@@ -386,7 +398,7 @@ export default function RifaPublica() {
         )}
 
         <p className="rifa-publica__powered">
-          Powered by <strong style={{ color: primary }}>RifaMaster</strong>
+          Powered by <strong style={{ color: primary }}>TironiDraws</strong>
         </p>
       </div>
     </div>

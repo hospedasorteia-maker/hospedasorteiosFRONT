@@ -1,4 +1,4 @@
-const CHART_HEIGHTS = [55, 80, 45, 90, 65, 75, 50, 85];
+﻿const CHART_HEIGHTS = [55, 80, 45, 90, 65, 75, 50, 85];
 
 export default function HeroPreview() {
   return (
@@ -9,7 +9,7 @@ export default function HeroPreview() {
           <span className="hero__preview-dot hero__preview-dot--red" />
           <span className="hero__preview-dot hero__preview-dot--yellow" />
           <span className="hero__preview-dot hero__preview-dot--green" />
-          <span className="hero__preview-url">app.rifamaster.com.br/dashboard</span>
+          <span className="hero__preview-url">app.TironiDraws.com.br/dashboard</span>
         </div>
 
         <div className="hero__preview-body">

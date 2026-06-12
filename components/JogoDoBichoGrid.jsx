@@ -6,6 +6,7 @@ import {
   BICHO_ANIMALS,
   formatBichoNumber,
   getAnimalByNumber,
+  getAnimalGroupLabel,
   getNumbersForGroup,
 } from "@/lib/jogoDoBicho";
 
@@ -21,9 +22,11 @@ export default function JogoDoBichoGrid({
   onPurchase,
   selectionReset = 0,
   readOnly = false,
+  playMode = "dezena",
 }) {
   const [activeGroup, setActiveGroup] = useState(1);
   const [selected, setSelected] = useState([]);
+  const grupoOnly = playMode === "grupo";
 
   const confirmedSet = toNumberSet(soldNumbers);
   const reservedSet = toNumberSet(reservedNumbers);
@@ -34,10 +37,16 @@ export default function JogoDoBichoGrid({
     setSelected([]);
   }, [selectionReset]);
 
-  function toggle(n) {
+  function toggleDezena(n) {
     if (readOnly) return;
     if (confirmedSet.has(n) || reservedSet.has(n)) return;
     setSelected((prev) => (prev.includes(n) ? prev.filter((x) => x !== n) : [...prev, n]));
+  }
+
+  function toggleGrupo(groupId) {
+    if (readOnly) return;
+    if (confirmedSet.has(groupId) || reservedSet.has(groupId)) return;
+    setSelected((prev) => (prev.includes(groupId) ? prev.filter((x) => x !== groupId) : [...prev, groupId]));
   }
 
   function handleBuy() {
@@ -49,34 +58,45 @@ export default function JogoDoBichoGrid({
   }
 
   const subtotal = selected.length * pricePerNumber;
-  const selectedLabels = selected.map((n) => formatBichoNumber(n));
+  const selectedLabels = grupoOnly
+    ? selected.map((id) => getAnimalGroupLabel(BICHO_ANIMALS.find((a) => a.id === id)))
+    : selected.map((n) => formatBichoNumber(n));
 
   return (
     <>
       <div className="number-grid bicho-grid">
         <div className="bicho-grid__head">
-          <p>Escolha o bicho</p>
-          <span>Toque no animal, selecione a dezena e clique em <strong>Continuar</strong></span>
+          <p>{grupoOnly ? "Escolha o bicho" : "Escolha o bicho"}</p>
+          <span>
+            {grupoOnly
+              ? <>Toque no animal para selecionar e clique em <strong>Continuar</strong></>
+              : <>Toque no animal, selecione a dezena e clique em <strong>Continuar</strong></>}
+          </span>
         </div>
 
         <div className="number-grid__cells bicho-grid__animals">
           {BICHO_ANIMALS.map((animal) => {
             const nums = getNumbersForGroup(animal.id);
-            const soldInGroup = nums.filter((n) => confirmedSet.has(n)).length;
-            const pickedInGroup = nums.filter((n) => selected.includes(n)).length;
-            const isActive = activeGroup === animal.id;
-            const allSold = soldInGroup === 4;
+            const soldInGroup = grupoOnly
+              ? confirmedSet.has(animal.id)
+              : nums.filter((n) => confirmedSet.has(n)).length;
+            const pickedInGroup = grupoOnly
+              ? selected.includes(animal.id)
+              : nums.filter((n) => selected.includes(n)).length;
+            const isActive = !grupoOnly && activeGroup === animal.id;
+            const allSold = grupoOnly ? soldInGroup : soldInGroup === 4;
+            const reserved = grupoOnly && reservedSet.has(animal.id);
             const label = `${animal.emoji} ${animal.name}`;
 
             return (
               <button
                 key={animal.id}
                 type="button"
-                disabled={allSold && !readOnly}
-                className={`number-grid__cell bicho-grid__animal${isActive ? " is-selected" : ""}${pickedInGroup > 0 ? " has-picked" : ""}${allSold ? " is-sold" : ""}`}
-                style={isActive ? { backgroundColor: primaryColor, borderColor: primaryColor } : undefined}
-                onClick={() => setActiveGroup(animal.id)}
-                title={allSold ? `${label} — esgotado` : label}
+                disabled={(allSold || reserved) && !readOnly}
+                className={`number-grid__cell bicho-grid__animal${isActive || pickedInGroup ? " is-selected" : ""}${pickedInGroup ? " has-picked" : ""}${allSold ? " is-sold" : ""}${reserved ? " is-reserved" : ""}`}
+                style={isActive || pickedInGroup ? { backgroundColor: primaryColor, borderColor: primaryColor } : undefined}
+                onClick={() => (grupoOnly ? toggleGrupo(animal.id) : setActiveGroup(animal.id))}
+                title={allSold ? `${label} — esgotado` : reserved ? `${label} — reservado` : label}
                 aria-label={label}
               >
                 {animal.emoji}
@@ -85,7 +105,7 @@ export default function JogoDoBichoGrid({
           })}
         </div>
 
-        {activeAnimal && (
+        {!grupoOnly && activeAnimal && (
           <>
             <p className="bicho-grid__dezenas-label">
               {activeAnimal.emoji} {activeAnimal.name} · grupo {String(activeAnimal.id).padStart(2, "0")}
@@ -105,7 +125,7 @@ export default function JogoDoBichoGrid({
                     className={`number-grid__cell${confirmed ? " is-sold" : ""}${reserved ? " is-reserved" : ""}${picked ? " is-selected" : ""}`}
                     style={picked ? { backgroundColor: primaryColor, borderColor: primaryColor, color: "#fff" } : undefined}
                     title={reserved ? "Reservado" : confirmed ? "Vendido" : undefined}
-                    onClick={() => toggle(n)}
+                    onClick={() => toggleDezena(n)}
                   >
                     {formatBichoNumber(n)}
                   </button>
@@ -120,17 +140,20 @@ export default function JogoDoBichoGrid({
             <p>Selecionadas:</p>
             <div className="bicho-grid__picked-list">
               {selected.map((n) => {
-                const animal = getAnimalByNumber(n);
+                const animal = grupoOnly
+                  ? BICHO_ANIMALS.find((a) => a.id === n)
+                  : getAnimalByNumber(n);
+
                 return (
                   <button
                     key={`picked-${n}`}
                     type="button"
                     className="bicho-grid__picked-chip"
                     style={{ borderColor: primaryColor, color: primaryColor }}
-                    onClick={() => toggle(n)}
+                    onClick={() => (grupoOnly ? toggleGrupo(n) : toggleDezena(n))}
                     title="Remover"
                   >
-                    {formatBichoNumber(n)} {animal?.emoji}
+                    {grupoOnly ? getAnimalGroupLabel(animal) : `${formatBichoNumber(n)} ${animal?.emoji}`}
                   </button>
                 );
               })}
@@ -141,7 +164,9 @@ export default function JogoDoBichoGrid({
         {!readOnly && (
           <div className="number-grid__footer bicho-grid__footer">
             <div className="number-grid__summary bicho-grid__summary">
-              <span>{selected.length} dezena(s) selecionada(s)</span>
+              <span>
+                {selected.length} {grupoOnly ? "bicho(s)" : "dezena(s)"} selecionada(s)
+              </span>
               <strong style={{ color: primaryColor }}>
                 {pricePerNumber > 0 ? `R$ ${fmtCurrency(subtotal)}` : "Grátis"}
               </strong>
@@ -162,7 +187,7 @@ export default function JogoDoBichoGrid({
       {!readOnly && selected.length > 0 && (
         <div className="checkout-sticky" style={{ borderColor: `${primaryColor}30` }}>
           <div className="checkout-sticky__info">
-            <strong>{selected.length} dezena(s)</strong>
+            <strong>{selected.length} {grupoOnly ? "bicho(s)" : "dezena(s)"}</strong>
             <span>{selectedLabels.join(" · ")}</span>
             <em>{pricePerNumber > 0 ? `R$ ${fmtCurrency(subtotal)}` : "Grátis"}</em>
           </div>

@@ -2,7 +2,7 @@ import "./globals.css";
 import "./premium.css";
 
 export const metadata = {
-  title: "RifaMaster — Crie rifas que vendem de verdade",
+  title: "TironiDraws — Crie rifas que vendem de verdade",
   description:
     "Plataforma completa para criar, divulgar e gerenciar suas rifas online. Sorteios transparentes, pagamentos seguros e painel intuitivo.",
 };

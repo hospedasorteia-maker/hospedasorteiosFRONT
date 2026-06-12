@@ -3,7 +3,7 @@ import AuthLayout from "@/components/AuthLayout";
 import LoginForm from "@/components/LoginForm";
 
 export const metadata = {
-  title: "Entrar — RifaMaster",
+  title: "Entrar — TironiDraws",
 };
 
 export default function LoginPage() {

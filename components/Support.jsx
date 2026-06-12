@@ -1,4 +1,4 @@
-import SupportForm from "./SupportForm";
+﻿import SupportForm from "./SupportForm";
 
 export default function Support() {
   return (
@@ -29,7 +29,7 @@ export default function Support() {
               </div>
               <div>
                 <strong>E-mail</strong>
-                <p>suporte@rifamaster.com.br — respondemos em até 2 horas.</p>
+                <p>suporte@TironiDraws.com.br — respondemos em até 2 horas.</p>
               </div>
             </div>
             <div className="channel">

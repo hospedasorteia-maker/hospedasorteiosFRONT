@@ -1,7 +1,7 @@
 import RaffleEditor from "@/components/RaffleEditor";
 
 export const metadata = {
-  title: "Editor de sorteio — RifaMaster",
+  title: "Editor de sorteio — TironiDraws",
 };
 
 export default function EditorPage() {

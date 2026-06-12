@@ -1,7 +1,7 @@
 import SupportContent from "@/components/dashboard/suporte/SupportContent";
 
 export const metadata = {
-  title: "Suporte — RifaMaster",
+  title: "Suporte — TironiDraws",
 };
 
 export default function SuportePage() {

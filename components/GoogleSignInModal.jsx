@@ -79,7 +79,7 @@ export default function GoogleSignInModal({ open, onClose, onSuccess }) {
         ) : step === "pick" ? (
           <>
             <h2 id="google-signin-title">Fazer login com o Google</h2>
-            <p className="google-signin__subtitle">Prosseguir para <strong>RifaMaster</strong></p>
+            <p className="google-signin__subtitle">Prosseguir para <strong>TironiDraws</strong></p>
 
             <div className="google-signin__accounts">
               {SUGGESTED_ACCOUNTS.map((account) => (
@@ -132,7 +132,7 @@ export default function GoogleSignInModal({ open, onClose, onSuccess }) {
 
         {!loading && (
           <p className="google-signin__legal">
-            Para continuar, o Google compartilhará seu nome e e-mail com o RifaMaster.
+            Para continuar, o Google compartilhará seu nome e e-mail com o TironiDraws.
           </p>
         )}
       </div>

@@ -3,7 +3,7 @@ import AuthLayout from "@/components/AuthLayout";
 import CadastroForm from "@/components/CadastroForm";
 
 export const metadata = {
-  title: "Criar conta — RifaMaster",
+  title: "Criar conta — TironiDraws",
 };
 
 export default function CadastroPage() {

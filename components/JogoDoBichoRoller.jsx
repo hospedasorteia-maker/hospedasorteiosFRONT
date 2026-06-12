@@ -4,7 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import {
   BICHO_ANIMALS,
   formatBichoNumber,
+  getAnimalByGroupId,
   getAnimalByNumber,
+  getAnimalGroupLabel,
+  pickRandomBichoAnimal,
   pickRandomBichoResult,
 } from "@/lib/jogoDoBicho";
 
@@ -12,12 +15,14 @@ export default function JogoDoBichoRoller({
   onResult,
   primaryColor = "#7C3AED",
   initialNumber,
+  playMode = "dezena",
   compact = false,
 }) {
   const timerRef = useRef(null);
   const [spinning, setSpinning] = useState(false);
   const [displayAnimal, setDisplayAnimal] = useState(BICHO_ANIMALS[0]);
   const [result, setResult] = useState(null);
+  const grupoOnly = playMode === "grupo";
 
   useEffect(() => {
     return () => {
@@ -30,18 +35,24 @@ export default function JogoDoBichoRoller({
       setResult(null);
       return;
     }
+
     const num = typeof initialNumber === "string" ? parseInt(initialNumber, 10) : initialNumber;
-    const animal = getAnimalByNumber(num);
+    const animal = grupoOnly ? getAnimalByGroupId(num) : getAnimalByNumber(num);
+
     if (animal) {
       setDisplayAnimal(animal);
-      setResult({ number: num, animal });
+      setResult(
+        grupoOnly
+          ? { number: animal.id, animal, label: getAnimalGroupLabel(animal) }
+          : { number: num, animal, label: `${formatBichoNumber(num)} · ${animal.emoji} ${animal.name}` },
+      );
     }
-  }, [initialNumber]);
+  }, [initialNumber, grupoOnly]);
 
   function handleSpin() {
     if (spinning) return;
 
-    const picked = pickRandomBichoResult();
+    const picked = grupoOnly ? pickRandomBichoAnimal() : pickRandomBichoResult();
     if (!picked.animal) return;
 
     setSpinning(true);
@@ -75,7 +86,9 @@ export default function JogoDoBichoRoller({
   }
 
   const display = result
-    ? `${formatBichoNumber(result.number)} · ${result.animal.emoji} ${result.animal.name}`
+    ? grupoOnly
+      ? getAnimalGroupLabel(result.animal)
+      : `${formatBichoNumber(result.number)} · ${result.animal.emoji} ${result.animal.name}`
     : null;
 
   return (
@@ -102,7 +115,7 @@ export default function JogoDoBichoRoller({
         disabled={spinning}
         onClick={handleSpin}
       >
-        {spinning ? "Girando..." : "Girar jogo do bicho"}
+        {spinning ? "Girando..." : grupoOnly ? "Girar bicho" : "Girar jogo do bicho"}
       </button>
     </div>
   );

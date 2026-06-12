@@ -1,5 +1,5 @@
-/* ============================================================
-   RifaMaster — Landing Page
+﻿/* ============================================================
+   TironiDraws — Landing Page
    Estilo fiel ao protótipo Base44 (sorteia-ai-pro)
    ============================================================ */
 
@@ -2003,6 +2003,13 @@ h1, h2, h3 {
    Migrado de legacy/css/dashboard.css — escopado em .app
    ============================================================ */
 .app {
+  --background: hsl(250, 15%, 97%);
+  --foreground: hsl(250, 25%, 10%);
+  --card: #ffffff;
+  --primary: hsl(262, 83%, 58%);
+  --muted: hsl(250, 12%, 93%);
+  --muted-foreground: hsl(250, 10%, 45%);
+  --border: hsl(250, 12%, 90%);
   --violet-700: #6d28d9;
   --violet-800: #5b21b6;
   --violet-900: #4c1d95;
@@ -2019,6 +2026,7 @@ h1, h2, h3 {
   display: flex;
   min-height: 100vh;
   background: var(--background);
+  color: var(--foreground);
 }
 
 .app svg {
@@ -5039,6 +5047,24 @@ h1, h2, h3 {
 .editor-presets button.is-active {
   background: #7c3aed;
   color: #fff;
+}
+
+.editor-price-input {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.editor-price-input > span {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.editor-price-input .editor-field__input {
+  flex: 1;
+  min-width: 0;
 }
 
 .editor-switch-row {

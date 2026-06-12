@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { getBuyerProfile } from "@/lib/purchases";
-import { formatBichoNumber } from "@/lib/jogoDoBicho";
+import { formatBichoPurchaseLabel } from "@/lib/jogoDoBicho";
 
-function formatNumbersLabel(numbers, isBicho) {
+function formatNumbersLabel(numbers, isBicho, bichoPlayMode = "dezena") {
   if (!numbers?.length) return "";
-  if (isBicho) return numbers.map((n) => formatBichoNumber(n)).join(", ");
+  if (isBicho) return numbers.map((n) => formatBichoPurchaseLabel(n, bichoPlayMode)).join(", ");
   return numbers.join(", ");
 }
 
@@ -20,6 +20,7 @@ export default function BuyerInfoModal({
   amount = 0,
   numbers = [],
   isBicho = false,
+  bichoPlayMode = "dezena",
 }) {
   const [mounted, setMounted] = useState(false);
   const [name, setName] = useState("");
@@ -56,7 +57,7 @@ export default function BuyerInfoModal({
     onSubmit({ name: name.trim(), phone: phone.trim(), cpf: cpf.trim() });
   }
 
-  const numbersLabel = formatNumbersLabel(numbers, isBicho);
+  const numbersLabel = formatNumbersLabel(numbers, isBicho, bichoPlayMode);
 
   return createPortal(
     <div className="buyer-modal" role="dialog" aria-modal="true" aria-labelledby="buyer-modal-title">
@@ -65,7 +66,9 @@ export default function BuyerInfoModal({
       <div className="buyer-modal__panel">
         <div className="buyer-modal__head">
           <h2 id="buyer-modal-title">Seus dados</h2>
-          <p>Informe seus dados para reservar {numbersCount} {isBicho ? "dezena(s)" : "número(s)"}</p>
+          <p>Informe seus dados para reservar {numbersCount}{" "}
+            {isBicho ? (bichoPlayMode === "grupo" ? "bicho(s)" : "dezena(s)") : "número(s)"}
+          </p>
           {numbersLabel && (
             <p className="buyer-modal__numbers">{numbersLabel}</p>
           )}

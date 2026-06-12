@@ -1,7 +1,7 @@
 import MinhasComprasPage from "@/components/MinhasComprasPage";
 
 export const metadata = {
-  title: "Minhas Compras — RifaMaster",
+  title: "Minhas Compras — TironiDraws",
 };
 
 export default function MinhasComprasRoute() {
