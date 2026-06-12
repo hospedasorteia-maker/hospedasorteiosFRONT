@@ -1,9 +1,9 @@
-"use client";
+﻿"use client";
 
-import { formatDrawDate, fmtCurrency } from "@/lib/raffles";
-import { isBichoMode, isBichoGrupoMode } from "@/lib/jogoDoBicho";
+import { formatDrawDate, fmtCurrency } from "@/lib/services/raffles";
+import { isBichoMode, isBichoGrupoMode } from "@/lib/services/jogoDoBicho";
 import EditorNumberGridPreview from "./EditorNumberGridPreview";
-import JogoDoBichoGrid from "../JogoDoBichoGrid";
+import JogoDoBichoGrid from "@/components/public/rifa/JogoDoBichoGrid";
 
 const CARD_STYLES = {
   modern: "editor-preview-card--modern",

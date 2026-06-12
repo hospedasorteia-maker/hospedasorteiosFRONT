@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 import {
@@ -9,7 +9,7 @@ import {
   getAnimalGroupLabel,
   pickRandomBichoAnimal,
   pickRandomBichoResult,
-} from "@/lib/jogoDoBicho";
+} from "@/lib/services/jogoDoBicho";
 
 export default function JogoDoBichoRoller({
   onResult,

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -8,8 +8,8 @@ import {
   getBuyerProfile,
   normalizePhone,
   formatPurchaseDate,
-} from "@/lib/purchases";
-import { fmtCurrency } from "@/lib/raffles";
+} from "@/lib/services/purchases";
+import { fmtCurrency } from "@/lib/services/raffles";
 
 const STATUS = {
   confirmed: { label: "Confirmado", className: "minha-compra__status--confirmed" },

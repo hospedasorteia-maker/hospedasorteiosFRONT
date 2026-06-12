@@ -1,22 +1,22 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { getRaffleById, saveRaffleToStorage, formatDrawDate, fmtCurrency } from "@/lib/raffles";
-import { createPixPayment } from "@/lib/pix";
+import { getRaffleById, saveRaffleToStorage, formatDrawDate, fmtCurrency } from "@/lib/services/raffles";
+import { createPixPayment } from "@/lib/services/pix";
 import {
   createPurchase,
   updatePurchase,
   saveBuyerProfile,
   getReservedNumbers,
-} from "@/lib/purchases";
-import { loadParticipants } from "@/lib/participants";
-import { getSupportSettings } from "@/lib/settings";
-import { buildWhatsAppHref } from "@/lib/support";
+} from "@/lib/services/purchases";
+import { loadParticipants } from "@/lib/services/participants";
+import { getSupportSettings } from "@/lib/services/settings";
+import { buildWhatsAppHref } from "@/lib/services/support";
 import NumberGrid from "./NumberGrid";
 import JogoDoBichoGrid from "./JogoDoBichoGrid";
-import { isBichoMode, isBichoGrupoMode, getAnimalLabel, getAnimalGroupLabel, getAnimalByGroupId, BICHO_DRAW_URL, BICHO_TOTAL_NUMBERS, BICHO_GRUPO_TOTAL } from "@/lib/jogoDoBicho";
+import { isBichoMode, isBichoGrupoMode, getAnimalLabel, getAnimalGroupLabel, getAnimalByGroupId, BICHO_DRAW_URL, BICHO_TOTAL_NUMBERS, BICHO_GRUPO_TOTAL } from "@/lib/services/jogoDoBicho";
 import BichoDrawSourceLink from "./BichoDrawSourceLink";
 import PixPaymentModal from "./PixPaymentModal";
 import BuyerInfoModal from "./BuyerInfoModal";

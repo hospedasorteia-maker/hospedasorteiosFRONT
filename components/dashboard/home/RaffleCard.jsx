@@ -1,9 +1,9 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
 import DeleteRaffleModal from "./DeleteRaffleModal";
-import { formatDrawDate } from "@/lib/raffles";
+import { formatDrawDate } from "@/lib/services/raffles";
 
 const STATUS = {
   active: { label: "Ativo", className: "raffle-card__status--active" },

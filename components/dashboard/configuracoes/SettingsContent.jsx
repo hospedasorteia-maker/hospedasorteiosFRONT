@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
@@ -8,7 +8,7 @@ import {
   getSettings,
   initSettingsAppearance,
   updateSettingsSection,
-} from "@/lib/settings";
+} from "@/lib/services/settings";
 
 function SettingsSwitch({ checked, onChange, label, hint }) {
   return (
@@ -54,12 +54,15 @@ function TabPerfil({ profile, onSave, onToast }) {
 
   return (
     <div className="settings-tab">
-      <div className="settings-profile-head">
-        <div className="settings-profile-head__avatar">{form.nome?.charAt(0) || "?"}</div>
-        <div>
-          <strong>{form.nome}</strong>
-          <p>{form.email}</p>
-          <span className="settings-badge settings-badge--violet">{form.plano || "Plano Gratuito"}</span>
+      <div className="settings-profile-hero">
+        <div className="settings-profile-hero__banner" />
+        <div className="settings-profile-head">
+          <div className="settings-profile-head__avatar">{form.nome?.charAt(0) || "?"}</div>
+          <div>
+            <strong>{form.nome || "Seu nome"}</strong>
+            <p>{form.email || "seu@email.com"}</p>
+            <span className="settings-badge settings-badge--violet">{form.plano || "Plano Gratuito"}</span>
+          </div>
         </div>
       </div>
 
@@ -399,11 +402,56 @@ function TabIntegracao({ integrations, onSave, onToast }) {
 }
 
 const TABS = [
-  { id: "perfil", label: "Perfil" },
-  { id: "notificacoes", label: "Notificações" },
-  { id: "seguranca", label: "Segurança" },
-  { id: "aparencia", label: "Aparência" },
-  { id: "integracao", label: "Integrações" },
+  {
+    id: "perfil",
+    label: "Perfil",
+    desc: "Informações pessoais e bio pública",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
+      </svg>
+    ),
+  },
+  {
+    id: "notificacoes",
+    label: "Notificações",
+    desc: "E-mail, WhatsApp e relatórios",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+      </svg>
+    ),
+  },
+  {
+    id: "seguranca",
+    label: "Segurança",
+    desc: "Senha, 2FA e sessões ativas",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect width="18" height="11" x="3" y="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
+      </svg>
+    ),
+  },
+  {
+    id: "aparencia",
+    label: "Aparência",
+    desc: "Tema, cores e idioma",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="13.5" cy="6.5" r=".5" fill="currentColor" /><circle cx="17.5" cy="10.5" r=".5" fill="currentColor" /><circle cx="8.5" cy="7.5" r=".5" fill="currentColor" /><circle cx="6.5" cy="12.5" r=".5" fill="currentColor" /><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" />
+      </svg>
+    ),
+  },
+  {
+    id: "integracao",
+    label: "Integrações",
+    desc: "API, PIX e ferramentas externas",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 22v-5" /><path d="M9 8V2" /><path d="M15 8V2" /><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z" />
+      </svg>
+    ),
+  },
 ];
 
 export default function SettingsContent() {
@@ -454,13 +502,16 @@ export default function SettingsContent() {
     integracao: <TabIntegracao integrations={settings.integrations} onSave={(d) => saveSection("integrations", d)} onToast={showToast} />,
   }[tab];
 
+  const activeTab = TABS.find((t) => t.id === tab) || TABS[0];
+
   return (
     <div className="settings">
       {toast && <div className="settings__toast">{toast}</div>}
 
       <div className="settings__head">
+        <p className="settings__eyebrow">Preferências da conta</p>
         <h1>Configurações</h1>
-        <p>Gerencie sua conta, segurança e preferências</p>
+        <p>Gerencie perfil, segurança, aparência e integrações em um só lugar.</p>
       </div>
 
       <div className="settings__layout">
@@ -472,12 +523,24 @@ export default function SettingsContent() {
               className={`settings__nav-item${tab === t.id ? " is-active" : ""}`}
               onClick={() => setTab(t.id)}
             >
-              {t.label}
+              <span className="settings__nav-icon">{t.icon}</span>
+              <span className="settings__nav-copy">
+                <strong>{t.label}</strong>
+                <small>{t.desc}</small>
+              </span>
             </button>
           ))}
         </aside>
 
-        <div className="settings__panel">{tabContent}</div>
+        <div className="settings__main">
+          <div className="settings__panel">
+            <div className="settings__panel-head">
+              <h2>{activeTab.label}</h2>
+              <p>{activeTab.desc}</p>
+            </div>
+            {tabContent}
+          </div>
+        </div>
       </div>
     </div>
   );

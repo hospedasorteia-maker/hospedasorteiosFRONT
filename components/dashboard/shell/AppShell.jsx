@@ -1,11 +1,11 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import BrandLogo from "@/components/BrandLogo";
-import { initSettingsAppearance } from "@/lib/settings";
-import { signOut } from "@/lib/auth";
+import BrandLogo from "@/components/public/landing/BrandLogo";
+import { initSettingsAppearance } from "@/lib/services/settings";
+import { signOut } from "@/lib/services/auth";
 import { getPageTitle, NAV_SECTIONS, NAV_BOTTOM, isActive } from "./navConfig";
 
 const ICONS = {

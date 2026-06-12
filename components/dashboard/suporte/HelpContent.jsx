@@ -1,8 +1,8 @@
-"use client";
+﻿"use client";
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { HELP_CATEGORIES, POPULAR_ARTICLES } from "@/lib/support";
+import { HELP_CATEGORIES, POPULAR_ARTICLES } from "@/lib/services/support";
 
 const CATEGORY_ICONS = {
   sorteios: (

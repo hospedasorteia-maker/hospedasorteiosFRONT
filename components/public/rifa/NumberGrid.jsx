@@ -1,7 +1,7 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
-import { fmtCurrency } from "@/lib/raffles";
+import { fmtCurrency } from "@/lib/services/raffles";
 export default function NumberGrid({ totalNumbers, pricePerNumber, primaryColor, soldNumbers = [], reservedNumbers = [], onPurchase, selectionReset = 0 }) {
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);

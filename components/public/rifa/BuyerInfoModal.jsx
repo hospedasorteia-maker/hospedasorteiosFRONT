@@ -1,9 +1,9 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { getBuyerProfile } from "@/lib/purchases";
-import { formatBichoPurchaseLabel } from "@/lib/jogoDoBicho";
+import { getBuyerProfile } from "@/lib/services/purchases";
+import { formatBichoPurchaseLabel } from "@/lib/services/jogoDoBicho";
 
 function formatNumbersLabel(numbers, isBicho, bichoPlayMode = "dezena") {
   if (!numbers?.length) return "";

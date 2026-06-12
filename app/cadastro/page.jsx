@@ -1,6 +1,6 @@
 import Link from "next/link";
-import AuthLayout from "@/components/AuthLayout";
-import CadastroForm from "@/components/CadastroForm";
+import AuthLayout from "@/components/public/auth/AuthLayout";
+import CadastroForm from "@/components/public/auth/CadastroForm";
 
 export const metadata = {
   title: "Criar conta — TironiDraws",

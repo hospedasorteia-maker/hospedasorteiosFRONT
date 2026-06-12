@@ -1,12 +1,12 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import RaffleCard from "./RaffleCard";
-import { deleteRaffleFromStorage, getRafflesFromStorage } from "@/lib/raffles";
-import { deletePurchasesByRaffleId } from "@/lib/purchases";
-import { loadParticipants, removeParticipantsByRaffleId } from "@/lib/participants";
-import { computeReportsData, fmtCurrency } from "@/lib/reports";
+import { deleteRaffleFromStorage, getRafflesFromStorage } from "@/lib/services/raffles";
+import { deletePurchasesByRaffleId } from "@/lib/services/purchases";
+import { loadParticipants, removeParticipantsByRaffleId } from "@/lib/services/participants";
+import { computeReportsData, fmtCurrency } from "@/lib/services/reports";
 
 const TREND_ICON = (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17" /><polyline points="16 7 22 7 22 13" /></svg>

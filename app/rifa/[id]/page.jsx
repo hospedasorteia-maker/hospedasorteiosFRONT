@@ -1,4 +1,4 @@
-import RifaPublica from "@/components/RifaPublica";
+import RifaPublica from "@/components/public/rifa/RifaPublica";
 
 export const metadata = {
   title: "Sorteio — TironiDraws",

@@ -1,14 +1,14 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
-import { fmtCurrency } from "@/lib/raffles";
+import { fmtCurrency } from "@/lib/services/raffles";
 import {
   BICHO_ANIMALS,
   formatBichoNumber,
   getAnimalByNumber,
   getAnimalGroupLabel,
   getNumbersForGroup,
-} from "@/lib/jogoDoBicho";
+} from "@/lib/services/jogoDoBicho";
 
 function toNumberSet(values = []) {
   return new Set(values.map((v) => Number(v)).filter((v) => !Number.isNaN(v)));

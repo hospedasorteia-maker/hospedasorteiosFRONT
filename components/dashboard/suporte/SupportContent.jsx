@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -9,8 +9,8 @@ import {
   getSubjectLabel,
   getTicketsFromStorage,
   saveTicket,
-} from "@/lib/support";
-import { getSettings, updateSettingsSection } from "@/lib/settings";
+} from "@/lib/services/support";
+import { getSettings, updateSettingsSection } from "@/lib/services/settings";
 
 function FaqItem({ item }) {
   const [open, setOpen] = useState(false);

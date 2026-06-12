@@ -1,8 +1,8 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getSettings, updateSettingsSection } from "@/lib/settings";
+import { getSettings, updateSettingsSection } from "@/lib/services/settings";
 
 function SettingsSwitch({ checked, onChange }) {
   return (
@@ -123,8 +123,9 @@ export default function PaymentContent() {
       <div className="settings__head payment-settings__head">
         <div>
           <Link href="/dashboard/configuracoes" className="payment-settings__back">← Configurações</Link>
+          <p className="settings__eyebrow">Checkout e recebimentos</p>
           <h1>Meios de Pagamento</h1>
-          <p>Configure como seus participantes vão pagar</p>
+          <p>Configure PIX, cartão e boleto para seus sorteios.</p>
         </div>
         <span className="payment-settings__badge">{ativos} ativo{ativos !== 1 ? "s" : ""}</span>
       </div>

@@ -1,12 +1,12 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 import EditorColorPicker from "./EditorColorPicker";
 import EditorImagePositionSelector from "./EditorImagePositionSelector";
 import EditorCardStyleSelector from "./EditorCardStyleSelector";
-import JogoDoBichoRoller from "../JogoDoBichoRoller";
-import { BICHO_TOTAL_NUMBERS, BICHO_GRUPO_TOTAL, getAnimalGroupLabel, getAnimalByGroupId, getAnimalLabel } from "@/lib/jogoDoBicho";
-import BichoDrawSourceLink from "../BichoDrawSourceLink";
+import JogoDoBichoRoller from "@/components/public/rifa/JogoDoBichoRoller";
+import { BICHO_TOTAL_NUMBERS, BICHO_GRUPO_TOTAL, getAnimalGroupLabel, getAnimalByGroupId, getAnimalLabel } from "@/lib/services/jogoDoBicho";
+import BichoDrawSourceLink from "@/components/public/rifa/BichoDrawSourceLink";
 
 const NUMBER_PRESETS = [25, 50, 100, 150, 200, 300, 500, 1000];
 const PRICE_PRESETS = [0, 1, 2, 5, 10, 15, 20, 50];

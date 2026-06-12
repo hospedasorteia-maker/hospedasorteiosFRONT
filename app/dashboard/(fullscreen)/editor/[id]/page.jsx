@@ -1,4 +1,4 @@
-import RaffleEditor from "@/components/RaffleEditor";
+import RaffleEditor from "@/components/editor/RaffleEditor";
 
 export const metadata = {
   title: "Editor de sorteio — TironiDraws",

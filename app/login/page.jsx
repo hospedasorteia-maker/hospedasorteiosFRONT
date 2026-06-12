@@ -1,6 +1,6 @@
 import Link from "next/link";
-import AuthLayout from "@/components/AuthLayout";
-import LoginForm from "@/components/LoginForm";
+import AuthLayout from "@/components/public/auth/AuthLayout";
+import LoginForm from "@/components/public/auth/LoginForm";
 
 export const metadata = {
   title: "Entrar — TironiDraws",

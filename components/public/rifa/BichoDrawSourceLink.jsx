@@ -1,8 +1,8 @@
-import {
+﻿import {
   BICHO_DRAW_BANCA,
   BICHO_DRAW_SCHEDULE,
   BICHO_DRAW_URL,
-} from "@/lib/jogoDoBicho";
+} from "@/lib/services/jogoDoBicho";
 
 export default function BichoDrawSourceLink({ variant = "public", primaryColor = "#7C3AED" }) {
   const isEditor = variant === "editor";

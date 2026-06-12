@@ -1,5 +1,5 @@
 import Link from "next/link";
-import BackToDashboard from "./BackToDashboard";
+import BackToDashboard from "@/components/public/rifa/BackToDashboard";
 
 export default function AuthLayout({ icon, title, subtitle, footer, children }) {
   return (

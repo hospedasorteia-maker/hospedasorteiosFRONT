@@ -1,10 +1,10 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import QRCode from "qrcode";
-import { fmtCurrency } from "@/lib/raffles";
-import { formatBichoPurchaseLabel } from "@/lib/jogoDoBicho";
+import { fmtCurrency } from "@/lib/services/raffles";
+import { formatBichoPurchaseLabel } from "@/lib/services/jogoDoBicho";
 
 export default function PixPaymentModal({
   open,

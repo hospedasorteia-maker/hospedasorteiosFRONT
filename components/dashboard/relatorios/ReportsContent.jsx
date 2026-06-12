@@ -5,7 +5,7 @@ import Link from "next/link";
 import ReportsBarChart from "./ReportsBarChart";
 import ReportsHorizontalChart from "./ReportsHorizontalChart";
 import ReportsRevenueRing from "./ReportsRevenueRing";
-import { syncAllData } from "@/lib/sync";
+import { syncAllData } from "@/lib/services/sync";
 import {
   computeReportsData,
   exportReportsCSV,
@@ -13,7 +13,7 @@ import {
   formatSaleDate,
   parseSaleDate,
   RAFFLE_STATUS,
-} from "@/lib/reports";
+} from "@/lib/services/reports";
 
 const STATUS_TABS = [
   { id: "all", label: "Todos" },

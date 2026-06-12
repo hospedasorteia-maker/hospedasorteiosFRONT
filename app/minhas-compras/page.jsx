@@ -1,4 +1,4 @@
-import MinhasComprasPage from "@/components/MinhasComprasPage";
+import MinhasComprasPage from "@/components/public/rifa/MinhasComprasPage";
 
 export const metadata = {
   title: "Minhas Compras — TironiDraws",

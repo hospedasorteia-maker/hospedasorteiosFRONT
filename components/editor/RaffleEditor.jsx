@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -9,11 +9,11 @@ import {
   createEmptyRaffle,
   normalizeRaffle,
   saveRaffleToStorage,
-} from "@/lib/raffles";
-import EditorSidebar from "./editor/EditorSidebar";
-import EditorRafflePreview from "./editor/EditorRafflePreview";
-import EditorAlertModal from "./editor/EditorAlertModal";
-import BackToDashboard from "./BackToDashboard";
+} from "@/lib/services/raffles";
+import EditorSidebar from "./EditorSidebar";
+import EditorRafflePreview from "./EditorRafflePreview";
+import EditorAlertModal from "./EditorAlertModal";
+import BackToDashboard from "@/components/public/rifa/BackToDashboard";
 
 export default function RaffleEditor() {
   const params = useParams();
