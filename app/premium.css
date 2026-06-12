@@ -579,7 +579,6 @@ body {
 }
 
 .plan:hover {
-  transform: translateY(-4px);
   box-shadow: var(--shadow-float);
 }
 
@@ -592,9 +591,13 @@ body {
   color: var(--text-primary);
 }
 
-.plan__desc,
-.plan__features li {
-  color: var(--text-muted);
+.plan--highlight .plan__desc,
+.plan--highlight .plan__features li {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.plan--highlight .plan__name {
+  color: rgba(255, 255, 255, 0.88);
 }
 
 .plan--highlight {

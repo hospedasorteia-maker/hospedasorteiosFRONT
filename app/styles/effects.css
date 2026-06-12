@@ -129,8 +129,69 @@
   opacity: 1;
 }
 
+.plan {
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
+  overflow: hidden;
+  will-change: transform;
+  transition:
+    transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.45s ease,
+    border-color 0.35s ease;
+}
+
+.plan::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 65%
+  );
+  transform: translateX(-130%);
+  transition: transform 0.75s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.plan:hover::before {
+  transform: translateX(130%);
+}
+
+.plan:not(.plan--highlight)::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.65), rgba(59, 130, 246, 0.35), transparent 65%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.plan:not(.plan--highlight):hover::after {
+  opacity: 1;
+}
+
+.plan.reveal.is-visible:not(.plan--highlight):not(:hover) {
+  animation: fx-plan-float 5s ease-in-out infinite;
+}
+
 .plan--highlight {
-  animation: fx-plan-glow 4s ease-in-out infinite;
+  overflow: visible;
+}
+
+.plan--highlight:not(:hover) {
+  animation: fx-plan-glow 4s ease-in-out infinite, fx-plan-float-highlight 5s ease-in-out infinite;
 }
 
 .plan--highlight::after {
@@ -138,15 +199,63 @@
   position: absolute;
   inset: -2px;
   border-radius: inherit;
-  background: conic-gradient(from 0deg, #c4b5fd, #e879f9, #a855f7, #c4b5fd);
+  background: conic-gradient(from 0deg, #c4b5fd, #60a5fa, #e879f9, #a855f7, #c4b5fd);
   z-index: -1;
-  opacity: 0.35;
-  animation: fx-spin 8s linear infinite;
+  opacity: 0.55;
+  animation: fx-spin 6s linear infinite;
+  filter: blur(0.5px);
 }
 
-.plan {
+.plan--highlight .check--white {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
+}
+
+.plan--highlight .check--white::after {
+  color: #7c3aed;
+}
+
+.plan .btn {
   position: relative;
-  z-index: 0;
+  z-index: 3;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.plan:hover .btn {
+  transform: translateY(-1px);
+}
+
+.plan--highlight .btn--white:hover {
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.35);
+}
+
+.plans__grid .plan.reveal.is-visible {
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.45s ease,
+    border-color 0.35s ease;
+}
+/* Hover por último — animation:none evita conflito com float */
+.plans__grid .plan:hover,
+.plans__grid .plan.reveal.is-visible:hover,
+.plans__grid .plan--highlight:hover,
+.plans__grid .plan--highlight.reveal.is-visible:hover {
+  animation: none;
+  transform: translateY(-12px) scale(1.06);
+  box-shadow:
+    0 32px 64px -16px rgba(124, 58, 237, 0.55),
+    0 0 48px rgba(168, 85, 247, 0.35);
+  border-color: rgba(124, 58, 237, 0.45);
+}
+
+.plans__grid .plan--highlight:hover,
+.plans__grid .plan--highlight.reveal.is-visible:hover {
+  box-shadow:
+    0 32px 64px -16px rgba(124, 58, 237, 0.55),
+    0 0 48px rgba(168, 85, 247, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 .reveal {
@@ -225,8 +334,26 @@
 }
 
 @keyframes fx-plan-glow {
-  0%, 100% { box-shadow: 0 25px 50px -12px rgba(196, 181, 253, 0.25); }
-  50% { box-shadow: 0 30px 60px -10px rgba(217, 70, 239, 0.45); }
+  0%, 100% {
+    box-shadow:
+      0 25px 50px -12px rgba(196, 181, 253, 0.3),
+      0 0 32px rgba(124, 58, 237, 0.2);
+  }
+  50% {
+    box-shadow:
+      0 32px 64px -10px rgba(217, 70, 239, 0.5),
+      0 0 56px rgba(59, 130, 246, 0.3);
+  }
+}
+
+@keyframes fx-plan-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes fx-plan-float-highlight {
+  0%, 100% { transform: scale(1.03) translateY(0); }
+  50% { transform: scale(1.03) translateY(-6px); }
 }
 
 @keyframes fx-spin {
@@ -247,8 +374,17 @@
   .hero__aurora,
   .hero__particle,
   .text-gradient,
+  .plan.reveal.is-visible:not(.plan--highlight),
   .plan--highlight,
   .plan--highlight::after,
+  .plan--highlight.reveal.is-visible {
+    animation: none !important;
+    transform: none;
+  }
+
+  .plan--highlight.reveal.is-visible {
+    transform: none;
+  }
   .metric-big__circle,
   .stats::before {
     animation: none !important;
