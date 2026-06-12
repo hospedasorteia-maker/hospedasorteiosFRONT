@@ -18,7 +18,7 @@ export default function Plans() {
             <ul className="plan__features">
               <li><i className="check check--green"></i> 1 rifa ativa por vez</li>
               <li><i className="check check--green"></i> Até 100 números</li>
-              <li><i className="check check--green"></i> PIX integrado</li>
+              <li><i className="check check--green"></i> Checkout PIX (QR + copia-e-cola)</li>
               <li><i className="check check--green"></i> Suporte por e-mail</li>
             </ul>
             <Link href="/cadastro" className="btn btn--primary btn--full">Começar grátis</Link>
@@ -32,8 +32,8 @@ export default function Plans() {
             <ul className="plan__features">
               <li><i className="check check--white"></i> Rifas ilimitadas</li>
               <li><i className="check check--white"></i> Até 10.000 números</li>
-              <li><i className="check check--white"></i> Cartão + Boleto + PIX</li>
-              <li><i className="check check--white"></i> Relatórios avançados</li>
+              <li><i className="check check--white"></i> PIX avançado + relatórios completos</li>
+              <li><i className="check check--white"></i> Cartão e boleto (em breve)</li>
               <li><i className="check check--white"></i> Domínio personalizado</li>
               <li><i className="check check--white"></i> Suporte prioritário</li>
             </ul>

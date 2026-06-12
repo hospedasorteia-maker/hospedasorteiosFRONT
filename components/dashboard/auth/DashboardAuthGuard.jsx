@@ -10,13 +10,21 @@ export default function DashboardAuthGuard({ children }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const session = ensureSession();
-    if (!session) {
-      const next = encodeURIComponent(pathname || "/dashboard");
-      router.replace(`/login?next=${next}`);
-      return;
-    }
-    setReady(true);
+    let cancelled = false;
+
+    ensureSession().then((session) => {
+      if (cancelled) return;
+      if (!session) {
+        const next = encodeURIComponent(pathname || "/dashboard");
+        router.replace(`/login?next=${next}`);
+        return;
+      }
+      setReady(true);
+    });
+
+    return () => {
+      cancelled = true;
+    };
   }, [pathname, router]);
 
   if (!ready) {

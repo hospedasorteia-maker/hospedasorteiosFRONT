@@ -12,12 +12,12 @@ const STEPS = [
   {
     num: "03",
     title: "Receba na hora",
-    text: "Os pagamentos via PIX caem direto na sua conta. Acompanhe tudo em tempo real no painel.",
+    text: "O comprador paga via PIX (QR Code ou copia-e-cola). Você acompanha reservas e vendas no painel.",
   },
   {
     num: "04",
     title: "Realize o sorteio",
-    text: "Na data combinada, faça o sorteio ao vivo pela plataforma. Resultado transparente e certificado.",
+    text: "Na data combinada, registre o ganhador e publique o resultado para os participantes.",
   },
 ];
 

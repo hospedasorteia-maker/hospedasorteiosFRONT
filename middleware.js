@@ -1,10 +1,20 @@
 import { NextResponse } from "next/server";
+import { verifySessionToken } from "@/lib/auth/server/session";
+import { AUTH_COOKIE } from "@/lib/auth/constants";
 
-const AUTH_COOKIE = "TironiDraws_auth";
-
-export function middleware(request) {
+export async function middleware(request) {
   const { pathname } = request.nextUrl;
-  const isAuthenticated = request.cookies.get(AUTH_COOKIE)?.value === "1";
+  const token = request.cookies.get(AUTH_COOKIE)?.value;
+  let isAuthenticated = false;
+
+  if (token) {
+    try {
+      await verifySessionToken(token);
+      isAuthenticated = true;
+    } catch {
+      isAuthenticated = false;
+    }
+  }
 
   if (pathname.startsWith("/dashboard") && !isAuthenticated) {
     const loginUrl = request.nextUrl.clone();

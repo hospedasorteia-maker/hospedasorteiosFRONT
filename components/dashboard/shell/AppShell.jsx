@@ -52,9 +52,9 @@ function NavLink({ item, pathname, onNavigate }) {
     active ? "nav-item--active" : "",
   ].filter(Boolean).join(" ");
 
-  function handleLogout(e) {
+  async function handleLogout(e) {
     e.preventDefault();
-    signOut();
+    await signOut();
     onNavigate?.();
     router.push("/");
   }

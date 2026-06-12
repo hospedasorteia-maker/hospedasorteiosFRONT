@@ -8,8 +8,8 @@ const SYSTEM_INFO = [
     icon: "📊",
   },
   {
-    title: "PIX automático",
-    text: "Receba pagamentos na hora com confirmação e reserva de números.",
+    title: "Checkout PIX",
+    text: "Gere QR Code e copia-e-cola para cada compra, com reserva de números no fluxo.",
     icon: "⚡",
   },
   {
@@ -29,7 +29,7 @@ const SYSTEM_INFO = [
   },
   {
     title: "Sorteio seguro",
-    text: "Processo transparente com certificado e histórico do resultado.",
+    text: "Defina a data, registre o ganhador e acompanhe o andamento da campanha.",
     icon: "🛡️",
   },
 ];
@@ -69,7 +69,7 @@ export default function Hero() {
         </h1>
 
         <p className="hero__text">
-          Crie campanhas profissionais em poucos cliques, receba via PIX automaticamente
+          Crie campanhas profissionais em poucos cliques, receba via PIX com QR Code
           e acompanhe tudo em um painel simples. Sem planilha, sem dor de cabeça.
         </p>
 

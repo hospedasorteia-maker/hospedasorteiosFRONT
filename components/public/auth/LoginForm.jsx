@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import GoogleIcon from "./GoogleIcon";
 import GoogleSignInModal from "./GoogleSignInModal";
-import { signInWithEmail, completeGoogleSignIn } from "@/lib/services/auth";
+import { signInWithEmail, signInWithGoogle } from "@/lib/services/auth";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -14,16 +14,17 @@ export default function LoginForm() {
   const [googleOpen, setGoogleOpen] = useState(false);
   const [error, setError] = useState("");
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     const form = e.currentTarget;
     const email = form.elements.email.value;
+    const password = form.elements.password.value;
 
     setLoading(true);
     setError("");
 
     try {
-      signInWithEmail({ email });
+      await signInWithEmail({ email, password });
       router.push(nextPath.startsWith("/") ? nextPath : "/dashboard");
     } catch (err) {
       setError(err.message || "Não foi possível entrar.");
@@ -31,9 +32,14 @@ export default function LoginForm() {
     }
   }
 
-  function handleGoogleSuccess({ name, email }) {
-    completeGoogleSignIn({ name, email });
-    router.push(nextPath.startsWith("/") ? nextPath : "/dashboard");
+  async function handleGoogleSuccess({ name, email }) {
+    setError("");
+    try {
+      await signInWithGoogle({ name, email });
+      router.push(nextPath.startsWith("/") ? nextPath : "/dashboard");
+    } catch (err) {
+      setError(err.message || "Não foi possível entrar com Google.");
+    }
   }
 
   return (
@@ -65,11 +71,11 @@ export default function LoginForm() {
         <div className="field">
           <div className="field__label-row">
             <label htmlFor="password">Senha</label>
-            <a href="#" className="field__link">Esqueceu a senha?</a>
+            <span className="field__link field__link--muted">Recuperação em breve</span>
           </div>
           <div className="field__input">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
-            <input id="password" type="password" placeholder="••••••••" autoComplete="current-password" required />
+            <input id="password" name="password" type="password" placeholder="••••••••" autoComplete="current-password" minLength={8} required />
           </div>
         </div>
 

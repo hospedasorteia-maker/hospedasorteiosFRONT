@@ -9,8 +9,8 @@ const FEATURES = [
   },
   {
     grad: "grad-2",
-    title: "PIX integrado",
-    text: "Pagamentos instantâneos via PIX, cartão ou boleto. Aprovação em segundos.",
+    title: "Checkout via PIX",
+    text: "QR Code e copia-e-cola na hora. Números reservados enquanto o pagamento está pendente.",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="5" height="5" x="3" y="3" rx="1" /><rect width="5" height="5" x="16" y="3" rx="1" /><rect width="5" height="5" x="3" y="16" rx="1" /><path d="M21 16h-3a2 2 0 0 0-2 2v3" /><path d="M21 21v.01" /><path d="M12 7v3a2 2 0 0 1-2 2H7" /><path d="M3 12h.01" /><path d="M12 3h.01" /><path d="M12 16v.01" /><path d="M16 12h1" /><path d="M21 12v.01" /><path d="M12 21v-1" /></svg>
     ),
@@ -25,8 +25,8 @@ const FEATURES = [
   },
   {
     grad: "grad-4",
-    title: "Sorteio transparente",
-    text: "Sorteio ao vivo com certificado de autenticidade para todos os participantes.",
+    title: "Sorteio organizado",
+    text: "Registre o ganhador, publique o resultado e mantenha o histórico da campanha no painel.",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /></svg>
     ),
