@@ -38,6 +38,8 @@ export default function RaffleEditor() {
       setConfig(normalizeRaffle(getRaffleById(id)));
     }
     setLoading(false);
+    setSaved(false);
+    setTitleError(false);
   }, [id, isNew]);
 
   function handleChange(next) {

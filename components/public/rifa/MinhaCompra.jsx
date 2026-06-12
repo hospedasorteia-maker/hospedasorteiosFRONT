@@ -8,6 +8,8 @@ import {
   getBuyerProfile,
   normalizePhone,
   formatPurchaseDate,
+  expirePendingPurchases,
+  getPurchaseSecondsRemaining,
 } from "@/lib/services/purchases";
 import { fmtCurrency } from "@/lib/services/raffles";
 
@@ -40,8 +42,13 @@ function PurchaseItem({ purchase, totalNumbers, primaryColor, onContinuePix }) {
 
       {purchase.status === "pending" && (
         <div className="minha-compra__active">
-          <p><strong>Números reservados</strong> — conclua o PIX para confirmar</p>
-          {onContinuePix && (
+          <p>
+            <strong>Números reservados</strong>
+            {getPurchaseSecondsRemaining(purchase) > 0
+              ? ` — conclua o PIX em ${Math.ceil(getPurchaseSecondsRemaining(purchase) / 60)} min`
+              : " — reserva expirada"}
+          </p>
+          {onContinuePix && getPurchaseSecondsRemaining(purchase) > 0 && (
             <button type="button" className="btn btn--violet btn--sm" onClick={() => onContinuePix(purchase)}>
               Ver PIX novamente
             </button>
@@ -81,6 +88,7 @@ export default function MinhaCompra({ raffleId, raffleTitle, totalNumbers, prima
   const [buyer, setBuyer] = useState(null);
 
   useEffect(() => {
+    expirePendingPurchases({ raffleId });
     const profile = getBuyerProfile();
     setBuyer(profile);
     if (profile?.phone && !lookupPhone) setLookupPhone(profile.phone);

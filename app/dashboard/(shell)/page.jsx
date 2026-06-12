@@ -1,7 +1,7 @@
 import DashboardContent from "@/components/dashboard/home/DashboardContent";
 
 export const metadata = {
-  title: "Campanhas — TironiDraws",
+  title: "Painel — TironiDraws",
 };
 
 export default function DashboardPage() {

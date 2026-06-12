@@ -1,90 +1,99 @@
 ﻿"use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import RaffleCard from "./RaffleCard";
+import RecentBuyersPanel from "./RecentBuyersPanel";
 import { deleteRaffleFromStorage, getRafflesFromStorage } from "@/lib/services/raffles";
 import { deletePurchasesByRaffleId } from "@/lib/services/purchases";
 import { loadParticipants, removeParticipantsByRaffleId } from "@/lib/services/participants";
-import { computeReportsData, fmtCurrency } from "@/lib/services/reports";
-
-const TREND_ICON = (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17" /><polyline points="16 7 22 7 22 13" /></svg>
-);
+import { computeDashboardOverview, fmtCurrency } from "@/lib/services/reports";
 
 const ARROW_ICON = (
   <svg className="quick-link__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" /></svg>
 );
 
+const KPI_CONFIG = [
+  {
+    key: "totalVendas",
+    label: "Vendas totais",
+    sub: (o) => `${o.sorteiosAtivos} sorteio(s) ativo(s)`,
+    accent: "accent-violet",
+    format: (v) => String(v),
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
+    ),
+  },
+  {
+    key: "numerosVendidos",
+    label: "Números vendidos",
+    sub: () => "confirmados e pagos",
+    accent: "accent-emerald",
+    format: (v) => String(v),
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" /><path d="M13 5v2" /><path d="M13 17v2" /><path d="M13 11v2" /></svg>
+    ),
+  },
+  {
+    key: "pendentes",
+    label: "Pendentes",
+    sub: (o) => `${o.numerosPendentes} número(s) aguardando PIX`,
+    accent: "accent-amber",
+    format: (v) => String(v),
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+    ),
+  },
+  {
+    key: "receita",
+    label: "Receita",
+    sub: (o) => (o.receitaPendente > 0 ? `${fmtCurrency(o.receitaPendente)} pendente` : "total confirmado"),
+    accent: "accent-indigo",
+    format: (v) => fmtCurrency(v),
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="2" x2="12" y2="22" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
+    ),
+  },
+];
+
+const EMPTY_OVERVIEW = {
+  totalVendas: 0,
+  numerosVendidos: 0,
+  pendentes: 0,
+  numerosPendentes: 0,
+  receita: 0,
+  receitaPendente: 0,
+  sorteiosAtivos: 0,
+  totalSorteios: 0,
+  recentBuyers: [],
+};
+
 export default function DashboardContent() {
   const [search, setSearch] = useState("");
   const [raffles, setRaffles] = useState([]);
-  const [stats, setStats] = useState({
-    totalReceita: 0,
-    totalNumeros: 0,
-    sorteiosAtivos: 0,
-    totalSorteios: 0,
-    totalCompras: 0,
-    confirmadas: 0,
-    uniqueParticipants: 0,
-    ticketMedio: 0,
-  });
+  const [overview, setOverview] = useState(EMPTY_OVERVIEW);
 
-  useEffect(() => {
+  const refreshData = useCallback(() => {
     setRaffles(getRafflesFromStorage());
+    setOverview(computeDashboardOverview());
   }, []);
 
   useEffect(() => {
-    const { metrics, sales } = computeReportsData();
-    const confirmed = sales.filter((s) => s.status === "confirmado");
-    const participants = loadParticipants();
-    const uniqueParticipants = new Set(
-      participants.map((p) => p.phone || p.email || p.name).filter(Boolean)
-    ).size;
-    const ticketMedio = confirmed.length ? metrics.totalReceita / confirmed.length : 0;
+    refreshData();
 
-    setStats({
-      totalReceita: metrics.totalReceita,
-      totalNumeros: metrics.totalNumeros,
-      sorteiosAtivos: metrics.sorteiosAtivos,
-      totalSorteios: metrics.totalSorteios,
-      totalCompras: metrics.totalCompras,
-      confirmadas: confirmed.length,
-      uniqueParticipants,
-      ticketMedio,
-    });
-  }, [raffles]);
+    function onStorage(event) {
+      if (!event.key || event.key.startsWith("TironiDraws_")) {
+        refreshData();
+      }
+    }
 
-  const secondaryMetrics = useMemo(() => [
-    {
-      label: "Sorteios ativos",
-      value: String(stats.sorteiosAtivos),
-      sub: `de ${stats.totalSorteios} total`,
-      accent: "accent-emerald",
-      icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" /><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" /><path d="M4 22h16" /><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" /><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" /><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" /></svg>,
-    },
-    {
-      label: "Total de compras",
-      value: String(stats.totalCompras),
-      sub: "todas as transações",
-      accent: "accent-sky",
-      icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>,
-    },
-    {
-      label: "Participantes",
-      value: String(stats.uniqueParticipants),
-      sub: "cadastrados",
-      accent: "accent-rose",
-      icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>,
-    },
-    {
-      label: "Ticket médio",
-      value: fmtCurrency(stats.ticketMedio),
-      sub: "por compra confirmada",
-      accent: "accent-indigo",
-      icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" /><path d="M3 5v14a2 2 0 0 0 2 2h16v-5" /><path d="M18 12a2 2 0 0 0 0 4h4v-4Z" /></svg>,
-    },
-  ], [stats]);
+    window.addEventListener("storage", onStorage);
+    window.addEventListener("focus", refreshData);
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      window.removeEventListener("focus", refreshData);
+    };
+  }, [refreshData]);
 
   const filtered = raffles.filter((r) => {
     const term = search.trim().toLowerCase();
@@ -99,14 +108,15 @@ export default function DashboardContent() {
     deletePurchasesByRaffleId(id);
     removeParticipantsByRaffleId(id);
     setRaffles(next);
+    setOverview(computeDashboardOverview());
   }
 
   return (
     <>
       <div className="page-head">
         <div>
-          <h1>Campanhas</h1>
-          <p>Acompanhe suas vendas e sorteios em tempo real</p>
+          <h1>Painel do cliente</h1>
+          <p>Resumo de vendas, receita e compradores das suas campanhas</p>
         </div>
         <Link href="/dashboard/editor/new" className="btn btn--violet">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
@@ -115,54 +125,20 @@ export default function DashboardContent() {
         </Link>
       </div>
 
-      <div className="metrics-primary">
-        <div className="metric-big metric-big--violet metric-big--wide">
-          <div className="metric-big__circle metric-big__circle--tr"></div>
-          <div className="metric-big__circle metric-big__circle--bl"></div>
-          <div className="metric-big__content">
-            <div className="metric-big__top">
-              <span className="metric-big__icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="2" x2="12" y2="22" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
-              </span>
+      <div className="dashboard-overview">
+        {KPI_CONFIG.map(({ key, label, sub, accent, format, icon }) => (
+          <article className="dashboard-kpi" key={key}>
+            <div className="dashboard-kpi__head">
+              <span className={`metric-small__icon ${accent}`}>{icon}</span>
+              <p>{label}</p>
             </div>
-            <p className="metric-big__label">Total arrecadado</p>
-            <p className="metric-big__value">{fmtCurrency(stats.totalReceita)}</p>
-            <p className="metric-big__sub">
-              {stats.confirmadas} compras confirmadas · Ticket médio: {fmtCurrency(stats.ticketMedio)}
-            </p>
-          </div>
-        </div>
-
-        <div className="metric-big metric-big--amber">
-          <div className="metric-big__circle metric-big__circle--tr"></div>
-          <div className="metric-big__circle metric-big__circle--bl"></div>
-          <div className="metric-big__content">
-            <div className="metric-big__top">
-              <span className="metric-big__icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" /><path d="M13 5v2" /><path d="M13 17v2" /><path d="M13 11v2" /></svg>
-              </span>
-            </div>
-            <p className="metric-big__label">Números vendidos</p>
-            <p className="metric-big__value">{stats.totalNumeros}</p>
-            <p className="metric-big__sub">
-              {stats.sorteiosAtivos} sorteios ativos · {stats.uniqueParticipants} participantes
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="metrics-secondary">
-        {secondaryMetrics.map((m) => (
-          <div className="metric-small" key={m.label}>
-            <div className="metric-small__head">
-              <span className={`metric-small__icon ${m.accent}`}>{m.icon}</span>
-              <p>{m.label}</p>
-            </div>
-            <p className="metric-small__value">{m.value}</p>
-            <p className="metric-small__sub">{m.sub}</p>
-          </div>
+            <p className="dashboard-kpi__value">{format(overview[key])}</p>
+            <p className="dashboard-kpi__sub">{sub(overview)}</p>
+          </article>
         ))}
       </div>
+
+      <RecentBuyersPanel buyers={overview.recentBuyers} />
 
       <div className="quick-access">
         <p className="quick-access__title">
@@ -171,7 +147,10 @@ export default function DashboardContent() {
         </p>
         <div className="quick-access__grid">
           <Link href="/dashboard/relatorios" className="quick-link quick-link--violet">
-            <span>{TREND_ICON}Relatórios</span>
+            <span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17" /><polyline points="16 7 22 7 22 13" /></svg>
+              Relatórios
+            </span>
             {ARROW_ICON}
           </Link>
           <Link href="/dashboard/participantes" className="quick-link">

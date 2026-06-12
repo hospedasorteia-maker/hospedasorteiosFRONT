@@ -11,6 +11,8 @@ import {
   updatePurchase,
   saveBuyerProfile,
   getReservedNumbers,
+  expirePendingPurchases,
+  isPurchaseExpired,
 } from "@/lib/services/purchases";
 import { loadParticipants } from "@/lib/services/participants";
 import { getSupportSettings } from "@/lib/services/settings";
@@ -49,17 +51,49 @@ export default function RifaPublica() {
   const [pixPayload, setPixPayload] = useState("");
   const [purchaseRefresh, setPurchaseRefresh] = useState(0);
   const [checkoutError, setCheckoutError] = useState("");
+  const [supportContacts, setSupportContacts] = useState({
+    whatsapp: "",
+    email: "",
+    whatsappMessage: "",
+  });
 
   function syncRaffleState(found) {
     setRaffle(found);
     if (!found) return;
 
+    expirePendingPurchases({ raffleId: found.id });
+    loadParticipants();
+
     const confirmed = normalizeNumbers(
-      found.soldNumbers || Array.from({ length: found.soldCount || 0 }, (_, i) => i + 1)
+      found.soldNumbers?.length
+        ? found.soldNumbers
+        : found.soldCount > 0
+          ? Array.from({ length: found.soldCount }, (_, i) => i + 1)
+          : [],
     );
     const reserved = normalizeNumbers(getReservedNumbers(found.id));
     setSoldNumbers(confirmed);
     setReservedNumbers(reserved);
+  }
+
+  function refreshAfterExpiry(message) {
+    if (!raffle) return;
+    loadParticipants();
+    setReservedNumbers(normalizeNumbers(getReservedNumbers(raffle.id)));
+    setSelectionReset((k) => k + 1);
+    setPurchaseRefresh((k) => k + 1);
+    if (message) setCheckoutError(message);
+  }
+
+  function handlePixExpire() {
+    if (!raffle) return;
+
+    expirePendingPurchases({ raffleId: raffle.id });
+    refreshAfterExpiry("Tempo de reserva expirado. Escolha os números novamente.");
+    setPixOpen(false);
+    setPendingSelection(null);
+    setActivePurchase(null);
+    setPixPayload("");
   }
 
   useEffect(() => {
@@ -67,6 +101,27 @@ export default function RifaPublica() {
     setLoading(false);
     setSupportContacts(getSupportSettings());
   }, [id]);
+
+  useEffect(() => {
+    if (!raffle?.id) return;
+
+    const interval = setInterval(() => {
+      const { expiredCount } = expirePendingPurchases({ raffleId: raffle.id });
+      if (expiredCount > 0) {
+        refreshAfterExpiry(
+          pixOpen ? "Tempo de reserva expirado. Escolha os números novamente." : "",
+        );
+        if (pixOpen) {
+          setPixOpen(false);
+          setPendingSelection(null);
+          setActivePurchase(null);
+          setPixPayload("");
+        }
+      }
+    }, 15000);
+
+    return () => clearInterval(interval);
+  }, [raffle?.id, pixOpen]);
 
   function handlePurchase({ numbers, amount }) {
     if (!raffle || numbers.length === 0) return;
@@ -149,6 +204,11 @@ export default function RifaPublica() {
   }
 
   function handleContinuePix(purchase) {
+    if (isPurchaseExpired(purchase)) {
+      expirePendingPurchases({ raffleId: raffle.id });
+      refreshAfterExpiry("Esta reserva expirou. Escolha os números novamente.");
+      return;
+    }
     setActivePurchase(purchase);
     setPixPayload(purchase.pixPayload || "");
     setPixOpen(true);
@@ -320,7 +380,7 @@ export default function RifaPublica() {
           </div>
           {isBichoMode(raffle) ? (
             <JogoDoBichoGrid
-              key={selectionReset}
+              key={`${id}-${selectionReset}`}
               pricePerNumber={raffle.price}
               primaryColor={primary}
               soldNumbers={soldNumbers}
@@ -330,7 +390,7 @@ export default function RifaPublica() {
             />
           ) : (
             <NumberGrid
-              key={selectionReset}
+              key={`${id}-${selectionReset}`}
               totalNumbers={total}
               pricePerNumber={raffle.price}
               primaryColor={primary}
@@ -379,6 +439,8 @@ export default function RifaPublica() {
           open={pixOpen}
           onClose={closePixModal}
           onConfirm={handlePixConfirm}
+          onExpire={handlePixExpire}
+          purchase={activePurchase}
           pixPayload={pixPayload}
           amount={activePurchase?.amount ?? pendingSelection?.amount ?? 0}
           numbers={activePurchase?.numbers ?? pendingSelection?.numbers ?? []}

@@ -69,18 +69,20 @@ export default function EditorRafflePreview({ config }) {
       return (
         <div className="editor-preview-bicho">
           <JogoDoBichoGrid
+            key={`preview-bicho-${config.id}-${config.bichoPlayMode || "dezena"}`}
             readOnly
             pricePerNumber={config.price || 0}
             primaryColor={colors.primary || "#7C3AED"}
             playMode={config.bichoPlayMode || "dezena"}
-            soldNumbers={[1, 5, 17]}
-            reservedNumbers={[42]}
+            soldNumbers={[]}
+            reservedNumbers={[]}
           />
         </div>
       );
     }
     return (
       <EditorNumberGridPreview
+        key={`preview-grid-${config.id}-${config.totalNumbers}`}
         totalNumbers={config.totalNumbers}
         colors={colors}
         pricePerNumber={config.price}

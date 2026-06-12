@@ -25,9 +25,9 @@ function SettingsSwitch({ checked, onChange, label, hint }) {
   );
 }
 
-function SettingsField({ label, hint, children }) {
+function SettingsField({ label, hint, children, className = "" }) {
   return (
-    <div className="settings-field">
+    <div className={`settings-field${className ? ` ${className}` : ""}`}>
       <label>{label}</label>
       {children}
       {hint && <small>{hint}</small>}
@@ -53,54 +53,52 @@ function TabPerfil({ profile, onSave, onToast }) {
   }, [profile]);
 
   return (
-    <div className="settings-tab">
-      <div className="settings-profile-hero">
-        <div className="settings-profile-hero__banner" />
-        <div className="settings-profile-head">
-          <div className="settings-profile-head__avatar">{form.nome?.charAt(0) || "?"}</div>
-          <div>
+    <div className="settings-tab settings-tab--profile">
+      <div className="settings-card settings-profile-panel">
+        <div className="settings-profile-panel__head">
+          <div className="settings-profile-panel__avatar">{form.nome?.charAt(0)?.toUpperCase() || "?"}</div>
+          <div className="settings-profile-panel__meta">
             <strong>{form.nome || "Seu nome"}</strong>
-            <p>{form.email || "seu@email.com"}</p>
-            <span className="settings-badge settings-badge--violet">{form.plano || "Plano Gratuito"}</span>
+            <span>{form.email || "seu@email.com"}</span>
+          </div>
+          <span className="settings-badge settings-badge--violet">{form.plano || "Plano Gratuito"}</span>
+        </div>
+
+        <div className="settings-profile-panel__body">
+          <div className="settings-grid">
+            <SettingsField label="Nome completo">
+              <input className="settings-input" value={form.nome} onChange={set("nome")} />
+            </SettingsField>
+            <SettingsField label="E-mail">
+              <input className="settings-input" type="email" value={form.email} onChange={set("email")} />
+            </SettingsField>
+            <SettingsField label="Telefone / WhatsApp">
+              <input className="settings-input" value={form.telefone} onChange={set("telefone")} />
+            </SettingsField>
+            <SettingsField label="Site ou link">
+              <input className="settings-input" value={form.site} onChange={set("site")} placeholder="https://" />
+            </SettingsField>
+            <SettingsField label="Cidade">
+              <input className="settings-input" value={form.cidade} onChange={set("cidade")} />
+            </SettingsField>
+            <SettingsField label="Estado">
+              <select className="settings-input" value={form.estado} onChange={set("estado")}>
+                {BRAZIL_STATES.map((s) => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+            </SettingsField>
+            <SettingsField label="Bio" hint="Aparece na página pública dos seus sorteios" className="settings-field--full">
+              <textarea className="settings-input settings-textarea" rows={3} value={form.bio} onChange={set("bio")} />
+            </SettingsField>
+          </div>
+
+          <div className="settings-actions">
+            <button type="button" className="btn btn--violet" onClick={() => { onSave(form); onToast("Perfil salvo com sucesso!"); }}>
+              Salvar Perfil
+            </button>
           </div>
         </div>
-      </div>
-
-      <hr className="settings-divider" />
-
-      <SectionTitle title="Informações Pessoais" sub="Informações exibidas no seu perfil público" />
-      <div className="settings-grid">
-        <SettingsField label="Nome completo">
-          <input className="settings-input" value={form.nome} onChange={set("nome")} />
-        </SettingsField>
-        <SettingsField label="E-mail">
-          <input className="settings-input" type="email" value={form.email} onChange={set("email")} />
-        </SettingsField>
-        <SettingsField label="Telefone / WhatsApp">
-          <input className="settings-input" value={form.telefone} onChange={set("telefone")} />
-        </SettingsField>
-        <SettingsField label="Site ou link">
-          <input className="settings-input" value={form.site} onChange={set("site")} />
-        </SettingsField>
-        <SettingsField label="Cidade">
-          <input className="settings-input" value={form.cidade} onChange={set("cidade")} />
-        </SettingsField>
-        <SettingsField label="Estado">
-          <select className="settings-input" value={form.estado} onChange={set("estado")}>
-            {BRAZIL_STATES.map((s) => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </select>
-        </SettingsField>
-        <SettingsField label="Bio" hint="Aparece na página pública dos seus sorteios">
-          <textarea className="settings-input settings-textarea" rows={3} value={form.bio} onChange={set("bio")} />
-        </SettingsField>
-      </div>
-
-      <div className="settings-actions">
-        <button type="button" className="btn btn--violet" onClick={() => { onSave(form); onToast("Perfil salvo com sucesso!"); }}>
-          Salvar Perfil
-        </button>
       </div>
     </div>
   );

@@ -1,15 +1,18 @@
 ﻿"use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import QRCode from "qrcode";
 import { fmtCurrency } from "@/lib/services/raffles";
 import { formatBichoPurchaseLabel } from "@/lib/services/jogoDoBicho";
+import { getPurchaseSecondsRemaining } from "@/lib/services/purchases";
 
 export default function PixPaymentModal({
   open,
   onClose,
   onConfirm,
+  onExpire,
+  purchase,
   pixPayload,
   amount,
   numbers = [],
@@ -21,7 +24,8 @@ export default function PixPaymentModal({
   const [mounted, setMounted] = useState(false);
   const [qrDataUrl, setQrDataUrl] = useState("");
   const [copied, setCopied] = useState(false);
-  const [expiresIn, setExpiresIn] = useState(900);
+  const [expiresIn, setExpiresIn] = useState(0);
+  const expiredHandled = useRef(false);
 
   useEffect(() => {
     setMounted(true);
@@ -43,23 +47,24 @@ export default function PixPaymentModal({
   }, [open, pixPayload]);
 
   useEffect(() => {
-    if (!open) return;
+    if (!open || !purchase) return;
 
+    expiredHandled.current = false;
     setCopied(false);
-    setExpiresIn(900);
 
-    const timer = setInterval(() => {
-      setExpiresIn((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+    function syncTimer() {
+      const remaining = getPurchaseSecondsRemaining(purchase);
+      setExpiresIn(remaining);
+      if (remaining <= 0 && !expiredHandled.current) {
+        expiredHandled.current = true;
+        onExpire?.();
+      }
+    }
 
+    syncTimer();
+    const timer = setInterval(syncTimer, 1000);
     return () => clearInterval(timer);
-  }, [open]);
+  }, [open, purchase, onExpire]);
 
   useEffect(() => {
     if (!open) return;
@@ -130,9 +135,9 @@ export default function PixPaymentModal({
 
         <p className="pix-modal__timer">
           {expiresIn > 0 ? (
-            <>Expira em <strong>{formatTime(expiresIn)}</strong></>
+            <>Reserva expira em <strong>{formatTime(expiresIn)}</strong></>
           ) : (
-            <span className="pix-modal__expired">PIX expirado — feche e tente novamente</span>
+            <span className="pix-modal__expired">Reserva expirada — os números foram liberados</span>
           )}
         </p>
 
@@ -140,7 +145,7 @@ export default function PixPaymentModal({
           <label htmlFor="pix-code">PIX copia e cola</label>
           <div className="pix-modal__code-row">
             <input id="pix-code" readOnly value={pixPayload} />
-            <button type="button" className="btn btn--outline btn--sm" onClick={handleCopy}>
+            <button type="button" className="btn btn--outline btn--sm" onClick={handleCopy} disabled={expiresIn === 0}>
               {copied ? "Copiado!" : "Copiar"}
             </button>
           </div>

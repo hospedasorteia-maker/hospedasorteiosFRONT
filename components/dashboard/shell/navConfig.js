@@ -1,5 +1,5 @@
 export const PAGE_TITLES = {
-  "/dashboard": "Campanhas",
+  "/dashboard": "Painel",
   "/dashboard/participantes": "Participantes",
   "/dashboard/relatorios": "Relatórios",
   "/dashboard/configuracoes": "Configurações",
