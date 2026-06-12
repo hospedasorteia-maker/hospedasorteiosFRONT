@@ -16,6 +16,30 @@
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
+.navbar.is-scrolled .navbar__links a {
+  color: #475569;
+}
+
+.navbar.is-scrolled .navbar__links a:hover {
+  color: #0f172a;
+}
+
+.navbar.is-scrolled .navbar__login {
+  color: #334155;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+}
+
+.navbar.is-scrolled .navbar__login:hover {
+  color: #7c3aed;
+  border-color: #ddd6fe;
+  background: #faf5ff;
+}
+
+.navbar.is-scrolled .navbar__toggle {
+  color: #334155;
+}
+
 /* No topo (hero escuro), links claros */
 .navbar:not(.is-scrolled) .brand__name,
 .navbar:not(.is-scrolled) .navbar__links a,
@@ -199,6 +223,18 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+}
+
+.navbar__login {
+  color: #fff;
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.navbar:not(.is-scrolled) .navbar__login:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .navbar__toggle {

@@ -418,10 +418,11 @@
 
 .rifa-publica__hero-text h1 {
   font-family: var(--font-heading);
-  font-size: 1.75rem;
+  font-size: clamp(1.25rem, 5vw, 1.75rem);
   font-weight: 800;
   line-height: 1.2;
   margin-top: 0.25rem;
+  word-break: break-word;
 }
 
 .rifa-publica__prize {
@@ -442,7 +443,7 @@
 .rifa-publica__body {
   max-width: 42rem;
   margin: 0 auto;
-  padding: 1rem 1rem 5rem;
+  padding: 1rem 1rem calc(5rem + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -691,6 +692,17 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.number-grid--has-selection {
+  padding-bottom: 0.25rem;
+}
+
+.number-grid__pagination-label {
+  text-align: center;
+  min-width: 0;
+  flex: 1;
 }
 
 .number-grid__summary {
@@ -816,11 +828,14 @@
 
 .pix-modal__qr img {
   display: block;
+  max-width: min(220px, calc(100vw - 4rem));
+  width: 100%;
+  height: auto;
 }
 
 .pix-modal__qr-loading {
-  width: 220px;
-  height: 220px;
+  width: min(220px, calc(100vw - 4rem));
+  aspect-ratio: 1;
   display: grid;
   place-items: center;
   font-size: 0.875rem;
@@ -937,6 +952,8 @@
   position: relative;
   width: 100%;
   max-width: 24rem;
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
   background: #fff;
   border-radius: 1.25rem;
   padding: 1.25rem;
@@ -1746,22 +1763,291 @@
   height: 16px;
 }
 
+.back-to-dashboard {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.back-to-dashboard svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.minha-compra__link-dashboard {
+  display: inline-flex;
+  margin-top: 0.625rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+  text-decoration: none;
+}
+
+.minha-compra__link-dashboard:hover {
+  color: #7c3aed;
+}
+
+@media (max-width: 768px) {
+  .rifa-publica__trust {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .rifa-publica__price-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .rifa-publica__date {
+    text-align: left;
+  }
+
+  .rifa-publica__progress-meta {
+    flex-wrap: wrap;
+    gap: 0.25rem 0.75rem;
+  }
+
+  .minhas-compras__stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 640px) {
+  .rifa-publica__header {
+    padding: 0.625rem 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .rifa-publica__header-left {
+    gap: 0.5rem;
+  }
+
+  .rifa-publica__brand > span:last-child {
+    display: none;
+  }
+
   .rifa-publica__minhas-compras span {
     display: none;
+  }
+
+  .rifa-publica__share {
+    padding: 0.375rem 0.625rem;
+    font-size: 0.6875rem;
   }
 
   .rifa-publica__back span {
     display: none;
   }
 
+  .rifa-publica__body {
+    padding: 0.875rem 0.875rem calc(6.5rem + env(safe-area-inset-bottom));
+  }
+
+  .rifa-publica__card {
+    padding: 0.875rem;
+    border-radius: 0.875rem;
+  }
+
+  .rifa-publica__trust {
+    grid-template-columns: 1fr;
+  }
+
+  .rifa-publica__trust-item {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    text-align: left;
+    padding: 0.625rem 0.75rem;
+  }
+
+  .number-grid__pagination {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .number-grid__pagination button {
+    flex: 1;
+    min-width: 5.5rem;
+  }
+
+  .number-grid__cells {
+    max-height: none;
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+    gap: 0.3125rem;
+  }
+
+  .number-grid__cell {
+    height: 38px;
+    font-size: 0.65rem;
+  }
+
+  .number-grid__footer .number-grid__buy-btn {
+    display: none;
+  }
+
+  .number-grid__footer {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .number-grid__summary {
+    align-items: center;
+  }
+
+  .pix-modal {
+    padding: 0.75rem;
+    align-items: flex-end;
+  }
+
+  .pix-modal__panel {
+    max-height: calc(100dvh - 1.5rem);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom));
+  }
+
+  .pix-modal__amount {
+    font-size: 1.625rem;
+  }
+
+  .pix-modal__code-row {
+    flex-direction: column;
+  }
+
+  .pix-modal__code-row .btn {
+    width: 100%;
+  }
+
+  .pix-modal__actions {
+    flex-direction: column;
+  }
+
+  .buyer-modal {
+    align-items: flex-end;
+    padding: 0.75rem;
+  }
+
+  .buyer-modal__panel {
+    max-height: calc(100dvh - 1.5rem);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    padding-bottom: calc(1.25rem + env(safe-area-inset-bottom));
+  }
+
+  .buyer-modal__actions {
+    flex-direction: column;
+  }
+
+  .minha-compra__lookup {
+    flex-direction: column;
+  }
+
+  .minha-compra__lookup .btn {
+    width: 100%;
+  }
+
+  .minha-compra__summary {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .minha-compra__summary-stats {
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .minha-compra__active {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .minha-compra__active .btn {
+    width: 100%;
+  }
+
+  .minhas-compras__header {
+    padding: 0.625rem 0.75rem;
+  }
+
+  .minhas-compras__hero {
+    padding: 1.25rem 0.875rem 2rem;
+  }
+
+  .minhas-compras__body {
+    padding: 0 0.875rem calc(2rem + env(safe-area-inset-bottom));
+  }
+
   .minhas-compras__stats {
     grid-template-columns: 1fr;
+  }
+
+  .minhas-compras__tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .minhas-compras__tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .minhas-compras__tabs button {
+    flex: 0 0 auto;
+    min-width: 6.5rem;
+    white-space: nowrap;
+  }
+
+  .minhas-compras__card-top {
+    flex-direction: column;
+  }
+
+  .minhas-compras__card-thumb {
+    width: 100%;
+    height: 120px;
+  }
+
+  .minhas-compras__card-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .minhas-compras__status {
+    white-space: normal;
   }
 
   .minhas-compras__card-meta strong {
     margin-left: 0;
     width: 100%;
+  }
+
+  .checkout-sticky {
+    flex-wrap: wrap;
+    gap: 0.625rem;
+  }
+
+  .checkout-sticky__btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .rifa-publica__header-actions {
+    gap: 0.375rem;
+  }
+
+  .rifa-publica__share {
+    display: none;
+  }
+
+  .number-grid__cells {
+    grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
   }
 }
 

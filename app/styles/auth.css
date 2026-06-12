@@ -497,3 +497,39 @@
   box-shadow: 0 0 0 1px var(--primary);
 }
 
+@media (max-width: 640px) {
+  .auth {
+    padding: 1rem 0.875rem;
+    align-items: flex-start;
+    padding-top: 1.5rem;
+  }
+
+  .auth__head {
+    margin-bottom: 1.75rem;
+  }
+
+  .auth__head h1 {
+    font-size: 1.5rem;
+  }
+
+  .auth__card {
+    padding: 1.25rem;
+  }
+
+  .google-signin__panel {
+    margin: 0.75rem;
+    max-width: none;
+  }
+
+  .google-signin__form-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .google-signin__form-actions .google-signin__link,
+  .google-signin__form-actions .google-signin__submit {
+    width: 100%;
+    text-align: center;
+  }
+}
+

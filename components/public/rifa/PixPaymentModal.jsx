@@ -127,7 +127,7 @@ export default function PixPaymentModal({
 
         <div className="pix-modal__qr">
           {qrDataUrl ? (
-            <img src={qrDataUrl} alt="QR Code PIX" width={220} height={220} />
+            <img src={qrDataUrl} alt="QR Code PIX" className="pix-modal__qr-img" width={220} height={220} />
           ) : (
             <div className="pix-modal__qr-loading">Gerando QR Code...</div>
           )}

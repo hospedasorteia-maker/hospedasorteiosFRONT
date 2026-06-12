@@ -7,6 +7,12 @@ export const metadata = {
     "Plataforma completa para criar, divulgar e gerenciar suas rifas online. Sorteios transparentes, pagamentos seguros e painel intuitivo.",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="pt-BR">
