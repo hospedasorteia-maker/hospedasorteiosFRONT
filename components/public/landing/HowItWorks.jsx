@@ -23,20 +23,25 @@ const STEPS = [
 
 export default function HowItWorks() {
   return (
-    <section className="section section--muted" id="como-funciona">
+    <section className="section how-steps" id="como-funciona">
+      <div className="how-steps__glow" aria-hidden="true" />
+
       <div className="container">
-        <div className="section__head reveal">
+        <div className="section__head">
           <span className="section__tag">Como funciona</span>
           <h2 className="section__title">Do zero ao sorteio em 4 passos</h2>
+          <p className="how-steps__subtitle">
+            Um fluxo simples do cadastro à divulgação do resultado — tudo pelo celular ou computador.
+          </p>
         </div>
 
-        <div className="steps__grid">
+        <div className="how-steps__grid">
           {STEPS.map((step) => (
-            <div className="step reveal" key={step.num}>
-              <div className="step__num">{step.num}</div>
+            <article className="how-steps__card" key={step.num}>
+              <span className="how-steps__index">{step.num}</span>
               <h3>{step.title}</h3>
               <p>{step.text}</p>
-            </div>
+            </article>
           ))}
         </div>
       </div>

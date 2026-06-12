@@ -19,7 +19,13 @@ export default function ScrollEffects() {
       { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
     );
 
-    document.querySelectorAll(".reveal").forEach((el) => revealObserver.observe(el));
+    document.querySelectorAll(".reveal").forEach((el) => {
+      revealObserver.observe(el);
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.92 && rect.bottom > 0) {
+        el.classList.add("is-visible");
+      }
+    });
 
     document.querySelectorAll(".reveal-stagger").forEach((group) => {
       group.querySelectorAll(".reveal").forEach((el, index) => {

@@ -734,6 +734,150 @@
 /* ============================================================
    Como funciona
    ============================================================ */
+.how-steps {
+  position: relative;
+  overflow: visible;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(124, 58, 237, 0.18), transparent 42%),
+    radial-gradient(circle at 85% 80%, rgba(59, 130, 246, 0.14), transparent 40%),
+    linear-gradient(180deg, #070818 0%, #0f172a 50%, #070818 100%);
+}
+
+.how-steps.section::before {
+  opacity: 0.35;
+}
+
+.how-steps .container {
+  position: relative;
+  z-index: 1;
+}
+
+.how-steps__glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(124, 58, 237, 0.12), transparent 55%);
+  pointer-events: none;
+}
+
+.how-steps .section__head {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 3rem;
+}
+
+.how-steps .section__title {
+  color: #fff;
+}
+
+.how-steps__subtitle {
+  max-width: 34rem;
+  margin: 0.75rem auto 0;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: #94a3b8;
+}
+
+.how-steps__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+.how-steps__card {
+  position: relative;
+  background: rgba(17, 24, 39, 0.72);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 1.25rem;
+  padding: 1.5rem 1.25rem 1.625rem;
+  text-align: center;
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  animation: how-steps-card-in 0.55s ease both;
+  transition:
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.4s ease,
+    border-color 0.3s ease,
+    background 0.3s ease;
+}
+
+.how-steps__card:nth-child(1) { animation-delay: 0.05s; }
+.how-steps__card:nth-child(2) { animation-delay: 0.12s; }
+.how-steps__card:nth-child(3) { animation-delay: 0.19s; }
+.how-steps__card:nth-child(4) { animation-delay: 0.26s; }
+
+@keyframes how-steps-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.how-steps__card:hover {
+  transform: translateY(-8px);
+  background: rgba(17, 24, 39, 0.88);
+  border-color: rgba(124, 58, 237, 0.4);
+  box-shadow:
+    0 24px 48px -16px rgba(124, 58, 237, 0.35),
+    0 0 40px rgba(124, 58, 237, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.how-steps__index {
+  width: 3.25rem;
+  height: 3.25rem;
+  margin: 0 auto 1rem;
+  border-radius: 1rem;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%);
+  color: #fff;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 800;
+  box-shadow: 0 10px 24px rgba(124, 58, 237, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.how-steps__card:hover .how-steps__index {
+  transform: scale(1.06);
+  box-shadow: 0 12px 28px rgba(124, 58, 237, 0.5);
+}
+
+@media (min-width: 1025px) {
+  .how-steps__card:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 2.6rem;
+    left: calc(50% + 1.75rem);
+    width: calc(50% + 0.625rem);
+    height: 2px;
+    background: linear-gradient(90deg, rgba(124, 58, 237, 0.55), rgba(59, 130, 246, 0.15));
+    pointer-events: none;
+  }
+}
+
+.how-steps__card h3 {
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: #f8fafc;
+  margin-bottom: 0.5rem;
+}
+
+.how-steps__card p {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: #94a3b8;
+}
+
 .steps__grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -1239,7 +1383,8 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .steps__grid {
+  .steps__grid,
+  .how-steps__grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -1293,8 +1438,17 @@
 
   .features__grid,
   .steps__grid,
+  .how-steps__grid,
   .testimonials__grid {
     grid-template-columns: 1fr;
+  }
+
+  .how-steps__card:hover {
+    transform: none;
+  }
+
+  .how-steps__card {
+    animation: none;
   }
 
   .stats__grid {
