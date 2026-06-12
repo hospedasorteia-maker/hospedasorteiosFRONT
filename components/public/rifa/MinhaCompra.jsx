@@ -32,7 +32,7 @@ function PurchaseItem({ purchase, totalNumbers, primaryColor, onContinuePix }) {
         <div>
           <p className="minha-compra__item-date">{formatPurchaseDate(purchase.createdAt)}</p>
           <p className="minha-compra__item-meta">
-            {numbers.length} número(s) · R$ {fmtCurrency(purchase.amount || 0)}
+            {numbers.length} número(s) · {fmtCurrency(purchase.amount || 0)}
           </p>
         </div>
         <span className={`minha-compra__status ${status.className}`}>{status.label}</span>

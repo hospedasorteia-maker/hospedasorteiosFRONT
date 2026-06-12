@@ -168,7 +168,7 @@ export default function JogoDoBichoGrid({
                 {selected.length} {grupoOnly ? "bicho(s)" : "dezena(s)"} selecionada(s)
               </span>
               <strong style={{ color: primaryColor }}>
-                {pricePerNumber > 0 ? `R$ ${fmtCurrency(subtotal)}` : "Grátis"}
+                {pricePerNumber > 0 ? fmtCurrency(subtotal) : "Grátis"}
               </strong>
             </div>
             <button
@@ -178,7 +178,7 @@ export default function JogoDoBichoGrid({
               disabled={selected.length === 0}
               onClick={handleBuy}
             >
-              Continuar compra
+              Continuar com PIX
             </button>
           </div>
         )}
@@ -189,7 +189,7 @@ export default function JogoDoBichoGrid({
           <div className="checkout-sticky__info">
             <strong>{selected.length} {grupoOnly ? "bicho(s)" : "dezena(s)"}</strong>
             <span>{selectedLabels.join(" · ")}</span>
-            <em>{pricePerNumber > 0 ? `R$ ${fmtCurrency(subtotal)}` : "Grátis"}</em>
+            <em>{pricePerNumber > 0 ? fmtCurrency(subtotal) : "Grátis"}</em>
           </div>
           <button
             type="button"
@@ -197,7 +197,7 @@ export default function JogoDoBichoGrid({
             style={{ backgroundColor: primaryColor }}
             onClick={handleBuy}
           >
-            Continuar
+            Continuar com PIX
           </button>
         </div>
       )}

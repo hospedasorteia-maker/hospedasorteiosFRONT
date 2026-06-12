@@ -1,4 +1,4 @@
-import "./globals.css";
+import "./styles/base.css";
 import "./premium.css";
 
 export const metadata = {

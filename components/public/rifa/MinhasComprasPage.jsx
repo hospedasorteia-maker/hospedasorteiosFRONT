@@ -45,7 +45,7 @@ function PurchaseCard({ purchase }) {
         <div className="minhas-compras__card-meta">
           <span>{formatPurchaseDate(purchase.createdAt)}</span>
           <span>{numbers.length} número(s)</span>
-          {purchase.amount > 0 && <strong>R$ {fmtCurrency(purchase.amount)}</strong>}
+          {purchase.amount > 0 && <strong>{fmtCurrency(purchase.amount)}</strong>}
         </div>
 
         <button type="button" className="minhas-compras__toggle" onClick={() => setOpen(!open)}>
@@ -142,7 +142,7 @@ export default function MinhasComprasPage() {
             <span>Números confirmados</span>
           </div>
           <div>
-            <strong>R$ {fmtCurrency(totalPaid)}</strong>
+            <strong>{fmtCurrency(totalPaid)}</strong>
             <span>Total investido</span>
           </div>
           <div>

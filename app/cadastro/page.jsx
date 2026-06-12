@@ -1,7 +1,8 @@
+import { Suspense } from "react";
+import "../styles/auth.css";
 import Link from "next/link";
 import AuthLayout from "@/components/public/auth/AuthLayout";
 import CadastroForm from "@/components/public/auth/CadastroForm";
-
 export const metadata = {
   title: "Criar conta — TironiDraws",
 };
@@ -18,7 +19,8 @@ export default function CadastroPage() {
         <>Já tem uma conta? <Link href="/login">Entrar</Link></>
       }
     >
-      <CadastroForm />
-    </AuthLayout>
-  );
+      <Suspense fallback={<p className="auth__loading">Carregando...</p>}>
+        <CadastroForm />
+      </Suspense>
+    </AuthLayout>  );
 }

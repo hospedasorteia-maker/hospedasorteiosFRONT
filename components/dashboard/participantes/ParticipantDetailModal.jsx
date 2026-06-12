@@ -91,7 +91,7 @@ export default function ParticipantDetailModal({ participant, onClose }) {
             <p className="participant-modal__label">Compra</p>
             <div className="participant-modal__grid">
               <div><span>Sorteio</span><strong>{participant.raffle}</strong></div>
-              <div><span>Total pago</span><strong className="is-green">R$ {fmtCurrency(participant.total || 0)}</strong></div>
+              <div><span>Total pago</span><strong className="is-green">{fmtCurrency(participant.total || 0)}</strong></div>
               <div><span>Data</span><strong>{participant.date}</strong></div>
               <div><span>Pagamento</span><strong>{participant.paymentMethod}</strong></div>
             </div>

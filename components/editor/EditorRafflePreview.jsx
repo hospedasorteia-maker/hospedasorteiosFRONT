@@ -57,7 +57,7 @@ export default function EditorRafflePreview({ config }) {
         </span>
         {config.price > 0 && (
           <span style={{ backgroundColor: `${colors.accent}25`, color: colors.text || "#1E1B4B" }}>
-            R$ {fmtCurrency(config.price)}
+            {fmtCurrency(config.price)}
           </span>
         )}
       </div>

@@ -1,35 +1,48 @@
 ﻿"use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import GoogleIcon from "./GoogleIcon";
 import GoogleSignInModal from "./GoogleSignInModal";
-import { completeGoogleSignIn } from "@/lib/services/auth";
+import { signInWithEmail, completeGoogleSignIn } from "@/lib/services/auth";
 
 export default function CadastroForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const nextPath = searchParams.get("next") || "/dashboard";
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
   const [googleOpen, setGoogleOpen] = useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
     const form = e.currentTarget;
+    const email = form.elements.email.value;
     const password = form.elements.password.value;
     const confirm = form.elements.confirm.value;
 
     if (password !== confirm) {
-      setError(true);
+      setPasswordError(true);
       return;
     }
-    setError(false);
+
+    setPasswordError(false);
+    setError("");
     setLoading(true);
-    setTimeout(() => router.push("/dashboard"), 800);
+
+    try {
+      signInWithEmail({ email });
+      router.push(nextPath.startsWith("/") ? nextPath : "/dashboard");
+    } catch (err) {
+      setError(err.message || "Não foi possível criar a conta.");
+      setLoading(false);
+    }
   }
 
   function handleGoogleSuccess({ name, email }) {
     completeGoogleSignIn({ name, email });
-    router.push("/dashboard");
+    router.push(nextPath.startsWith("/") ? nextPath : "/dashboard");
   }
 
   return (
@@ -47,7 +60,8 @@ export default function CadastroForm() {
 
       <div className="divider"><span>ou</span></div>
 
-      {error && <div className="auth__error">As senhas não coincidem</div>}
+      {passwordError && <div className="auth__error">As senhas não coincidem</div>}
+      {error && <div className="auth__error">{error}</div>}
 
       <form onSubmit={handleSubmit}>
         <div className="field">

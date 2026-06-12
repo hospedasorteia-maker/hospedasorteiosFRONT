@@ -108,7 +108,7 @@ export default function PixPaymentModal({
         </div>
 
         <div className="pix-modal__amount" style={{ color: primaryColor }}>
-          {amount > 0 ? `R$ ${fmtCurrency(amount)}` : "Grátis"}
+          {amount > 0 ? fmtCurrency(amount) : "Grátis"}
         </div>
 
         <p className="pix-modal__subtitle">

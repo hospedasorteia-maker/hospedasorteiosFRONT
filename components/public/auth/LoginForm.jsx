@@ -1,25 +1,39 @@
 ﻿"use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import GoogleIcon from "./GoogleIcon";
 import GoogleSignInModal from "./GoogleSignInModal";
-import { completeGoogleSignIn } from "@/lib/services/auth";
+import { signInWithEmail, completeGoogleSignIn } from "@/lib/services/auth";
 
 export default function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const nextPath = searchParams.get("next") || "/dashboard";
   const [loading, setLoading] = useState(false);
   const [googleOpen, setGoogleOpen] = useState(false);
+  const [error, setError] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
+    const form = e.currentTarget;
+    const email = form.elements.email.value;
+
     setLoading(true);
-    setTimeout(() => router.push("/dashboard"), 800);
+    setError("");
+
+    try {
+      signInWithEmail({ email });
+      router.push(nextPath.startsWith("/") ? nextPath : "/dashboard");
+    } catch (err) {
+      setError(err.message || "Não foi possível entrar.");
+      setLoading(false);
+    }
   }
 
   function handleGoogleSuccess({ name, email }) {
     completeGoogleSignIn({ name, email });
-    router.push("/dashboard");
+    router.push(nextPath.startsWith("/") ? nextPath : "/dashboard");
   }
 
   return (
@@ -37,12 +51,14 @@ export default function LoginForm() {
 
       <div className="divider"><span>ou</span></div>
 
+      {error && <div className="auth__error">{error}</div>}
+
       <form onSubmit={handleSubmit}>
         <div className="field">
           <label htmlFor="email">E-mail</label>
           <div className="field__input">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg>
-            <input id="email" type="email" placeholder="voce@exemplo.com" autoComplete="email" autoFocus required />
+            <input id="email" name="email" type="email" placeholder="voce@exemplo.com" autoComplete="email" autoFocus required />
           </div>
         </div>
 

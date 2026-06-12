@@ -158,8 +158,21 @@ body {
   color: transparent;
 }
 
+.app .brand__name,
+.sidebar__logo .brand__name {
+  background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 55%, #9333ea 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 .brand__tag {
   color: #a78bfa;
+}
+
+.app .brand__tag,
+.sidebar__logo .brand__tag {
+  color: #6d28d9;
 }
 
 .navbar.is-scrolled .brand__name {

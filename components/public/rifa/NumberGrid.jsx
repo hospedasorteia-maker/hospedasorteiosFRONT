@@ -65,7 +65,7 @@ export default function NumberGrid({ totalNumbers, pricePerNumber, primaryColor,
         <div className="number-grid__summary">
           <span>{selected.length} número(s) selecionado(s)</span>
           {selected.length > 0 && (
-            <strong style={{ color: primaryColor }}>R$ {fmtCurrency(subtotal)}</strong>
+            <strong style={{ color: primaryColor }}>{fmtCurrency(subtotal)}</strong>
           )}
         </div>
         <button
@@ -74,7 +74,7 @@ export default function NumberGrid({ totalNumbers, pricePerNumber, primaryColor,
           disabled={selected.length === 0}
           onClick={handleBuy}
         >
-          Comprar números
+          Continuar com PIX
         </button>
       </div>
     </div>

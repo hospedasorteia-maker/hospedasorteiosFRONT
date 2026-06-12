@@ -1,3 +1,4 @@
+import "../styles/rifa.css";
 import MinhasComprasPage from "@/components/public/rifa/MinhasComprasPage";
 
 export const metadata = {

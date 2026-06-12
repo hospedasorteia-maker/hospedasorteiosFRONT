@@ -1,3 +1,5 @@
+import "./styles/landing.css";
+import "./styles/effects.css";
 import Navbar from "@/components/public/landing/Navbar";
 import Hero from "@/components/public/landing/Hero";
 import Stats from "@/components/public/landing/Stats";

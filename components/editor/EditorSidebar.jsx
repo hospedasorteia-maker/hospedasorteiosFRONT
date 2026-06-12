@@ -7,6 +7,7 @@ import EditorCardStyleSelector from "./EditorCardStyleSelector";
 import JogoDoBichoRoller from "@/components/public/rifa/JogoDoBichoRoller";
 import { BICHO_TOTAL_NUMBERS, BICHO_GRUPO_TOTAL, getAnimalGroupLabel, getAnimalByGroupId, getAnimalLabel } from "@/lib/services/jogoDoBicho";
 import BichoDrawSourceLink from "@/components/public/rifa/BichoDrawSourceLink";
+import { processMediaUpload } from "@/lib/services/media";
 
 const NUMBER_PRESETS = [25, 50, 100, 150, 200, 300, 500, 1000];
 const PRICE_PRESETS = [0, 1, 2, 5, 10, 15, 20, 50];
@@ -76,6 +77,7 @@ export default function EditorSidebar({ config, onChange, titleError = false, fo
   const titleRef = useRef(null);
   const [uploading, setUploading] = useState(false);
   const [uploadingCert, setUploadingCert] = useState(false);
+  const [uploadError, setUploadError] = useState("");
   const [newCoupon, setNewCoupon] = useState({
     code: "",
     discountType: "percentage",
@@ -97,30 +99,36 @@ export default function EditorSidebar({ config, onChange, titleError = false, fo
     onChange({ ...config, layoutConfig: { ...config.layoutConfig, [key]: value } });
   }
 
-  function readFileAsDataUrl(file, callback) {
-    const reader = new FileReader();
-    reader.onload = () => callback(reader.result);
-    reader.readAsDataURL(file);
-  }
-
-  function handleImageUpload(e) {
+  async function handleImageUpload(e) {
     const file = e.target.files?.[0];
     if (!file) return;
     setUploading(true);
-    readFileAsDataUrl(file, (url) => {
+    setUploadError("");
+    try {
+      const { url } = await processMediaUpload(file);
       update("imageUrl", url);
+    } catch (error) {
+      setUploadError(error.message || "Não foi possível enviar a imagem.");
+    } finally {
       setUploading(false);
-    });
+      e.target.value = "";
+    }
   }
 
-  function handleCertificateUpload(e, type) {
+  async function handleCertificateUpload(e, type) {
     const file = e.target.files?.[0];
     if (!file) return;
     setUploadingCert(true);
-    readFileAsDataUrl(file, (url) => {
+    setUploadError("");
+    try {
+      const { url } = await processMediaUpload(file);
       onChange({ ...config, certificateUrl: url, certificateType: type });
+    } catch (error) {
+      setUploadError(error.message || "Não foi possível enviar o arquivo.");
+    } finally {
       setUploadingCert(false);
-    });
+      e.target.value = "";
+    }
   }
 
   function handleAddCoupon() {
@@ -393,11 +401,12 @@ export default function EditorSidebar({ config, onChange, titleError = false, fo
                 <label className="editor-upload-drop">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></svg>
                   <p>Clique para enviar</p>
-                  <span>PNG, JPG até 5MB</span>
+                  <span>PNG/JPG até 120 KB (ou use URL)</span>
                   <input type="file" accept="image/*" hidden onChange={handleImageUpload} />
                 </label>
               )}
               {uploading && <p className="editor-upload-status">Enviando imagem...</p>}
+              {uploadError && <p className="editor-field__hint" style={{ color: "#dc2626" }}>{uploadError}</p>}
               <div className="editor-field" style={{ marginTop: "0.75rem" }}>
                 <label className="editor-field__label editor-field__label--muted">Ou cole uma URL</label>
                 <input className="editor-field__input" value={config.imageUrl || ""} onChange={(e) => update("imageUrl", e.target.value)} placeholder="https://..." />

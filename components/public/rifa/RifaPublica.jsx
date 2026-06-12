@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { getRaffleById, saveRaffleToStorage, formatDrawDate, fmtCurrency } from "@/lib/services/raffles";
 import { createPixPayment } from "@/lib/services/pix";
+import { assertPixCheckoutAvailable } from "@/lib/services/checkout";
 import {
   createPurchase,
   updatePurchase,
@@ -47,7 +48,7 @@ export default function RifaPublica() {
   const [activePurchase, setActivePurchase] = useState(null);
   const [pixPayload, setPixPayload] = useState("");
   const [purchaseRefresh, setPurchaseRefresh] = useState(0);
-  const [supportContacts, setSupportContacts] = useState({ whatsapp: "", email: "" });
+  const [checkoutError, setCheckoutError] = useState("");
 
   function syncRaffleState(found) {
     setRaffle(found);
@@ -69,6 +70,13 @@ export default function RifaPublica() {
 
   function handlePurchase({ numbers, amount }) {
     if (!raffle || numbers.length === 0) return;
+    try {
+      assertPixCheckoutAvailable(raffle);
+      setCheckoutError("");
+    } catch (error) {
+      setCheckoutError(error.message || "Pagamento via PIX indisponível no momento.");
+      return;
+    }
     setPendingSelection({ numbers, amount });
     setBuyerOpen(true);
   }
@@ -245,8 +253,11 @@ export default function RifaPublica() {
             <div>
               <p className="rifa-publica__label">Valor por número</p>
               <p className="rifa-publica__price" style={{ color: primary }}>
-                {raffle.price > 0 ? `R$ ${fmtCurrency(raffle.price)}` : "Gratuita"}
+                {raffle.price > 0 ? fmtCurrency(raffle.price) : "Gratuita"}
               </p>
+              <span className="rifa-publica__pix-badge" style={{ color: primary, borderColor: `${primary}40`, backgroundColor: `${primary}12` }}>
+                Pagamento exclusivo via PIX
+              </span>
             </div>
             {raffle.drawDate && (
               <div className="rifa-publica__date">
@@ -294,6 +305,9 @@ export default function RifaPublica() {
         )}
 
         <div className="rifa-publica__card">
+          {checkoutError && (
+            <p className="rifa-publica__checkout-error" role="alert">{checkoutError}</p>
+          )}
           <div className="rifa-publica__grid-head">
             <p>{isBichoMode(raffle) ? (isBichoGrupoMode(raffle) ? "Escolha seu bicho" : "Escolha seu bicho e dezena") : "Escolha seus números"}</p>
             <span>
@@ -375,7 +389,7 @@ export default function RifaPublica() {
         />
 
         <div className="rifa-publica__trust">
-          {["Ambiente seguro", "Pagamento seguro", "Transparência"].map((label) => (
+          {["Ambiente seguro", "Pagamento via PIX", "Transparência"].map((label) => (
             <div key={label} className="rifa-publica__trust-item">
               <p>{label}</p>
             </div>

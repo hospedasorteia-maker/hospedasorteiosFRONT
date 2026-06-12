@@ -1,7 +1,8 @@
+import { Suspense } from "react";
+import "../styles/auth.css";
 import Link from "next/link";
 import AuthLayout from "@/components/public/auth/AuthLayout";
 import LoginForm from "@/components/public/auth/LoginForm";
-
 export const metadata = {
   title: "Entrar — TironiDraws",
 };
@@ -18,7 +19,8 @@ export default function LoginPage() {
         <>Não tem conta? <Link href="/cadastro">Criar uma</Link></>
       }
     >
-      <LoginForm />
-    </AuthLayout>
-  );
+      <Suspense fallback={<p className="auth__loading">Carregando...</p>}>
+        <LoginForm />
+      </Suspense>
+    </AuthLayout>  );
 }

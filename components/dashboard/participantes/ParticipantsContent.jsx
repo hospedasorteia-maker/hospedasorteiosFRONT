@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import ParticipantDetailModal from "./ParticipantDetailModal";
+import RemoveParticipantsModal from "./RemoveParticipantsModal";
 import { syncAllData } from "@/lib/services/sync";
 import { fmtCurrency } from "@/lib/services/raffles";
 import {
@@ -114,7 +115,7 @@ function getInitials(name = "") {
 }
 
 function formatMoney(value) {
-  return `R$ ${fmtCurrency(value || 0)}`;
+  return fmtCurrency(value || 0);
 }
 
 function SortIcon({ active, dir }) {
@@ -201,6 +202,7 @@ export default function ParticipantsContent() {
   const [toast, setToast] = useState("");
   const [raffleOptions, setRaffleOptions] = useState(["Todos os sorteios"]);
   const [refreshing, setRefreshing] = useState(false);
+  const [pendingRemoveIds, setPendingRemoveIds] = useState([]);
 
   const refresh = useCallback((options = {}) => {
     const { silent = false } = options;
@@ -287,12 +289,23 @@ export default function ParticipantsContent() {
     setSelectedIds(selectedIds.length === filtered.length ? [] : filtered.map((p) => p.id));
   }
 
-  function handleRemove(ids) {
+  const pendingRemoveParticipants = useMemo(
+    () => participants.filter((p) => pendingRemoveIds.includes(p.id)),
+    [participants, pendingRemoveIds],
+  );
+
+  function requestRemove(ids) {
     if (!ids.length) return;
-    if (!window.confirm(`Remover ${ids.length} participante(s)?`)) return;
+    setPendingRemoveIds(ids);
+  }
+
+  function confirmRemove() {
+    const ids = pendingRemoveIds;
+    if (!ids.length) return;
     const next = removeParticipantsByIds(ids);
     setParticipants(next);
     setSelectedIds((prev) => prev.filter((id) => !ids.includes(id)));
+    setPendingRemoveIds([]);
     showToast(`${ids.length} participante(s) removido(s)`);
   }
 
@@ -410,7 +423,7 @@ export default function ParticipantsContent() {
           </div>
           <div className="participants__bulk-actions">
             <button type="button" className="btn btn--outline btn--sm" onClick={handleBulkNotify}>Notificar</button>
-            <button type="button" className="btn btn--outline btn--sm participants__bulk-remove" onClick={() => handleRemove(selectedIds)}>Remover</button>
+            <button type="button" className="btn btn--outline btn--sm participants__bulk-remove" onClick={() => requestRemove(selectedIds)}>Remover</button>
           </div>
         </div>
       )}
@@ -536,7 +549,7 @@ export default function ParticipantsContent() {
                           participant={p}
                           onView={setSelectedParticipant}
                           onNotify={handleNotifyOne}
-                          onRemove={(row) => handleRemove([row.id])}
+                          onRemove={(row) => requestRemove([row.id])}
                         />
                       </td>
                     </tr>
@@ -557,6 +570,14 @@ export default function ParticipantsContent() {
 
       {selectedParticipant && (
         <ParticipantDetailModal participant={selectedParticipant} onClose={() => setSelectedParticipant(null)} />
+      )}
+
+      {pendingRemoveIds.length > 0 && (
+        <RemoveParticipantsModal
+          participants={pendingRemoveParticipants}
+          onClose={() => setPendingRemoveIds([])}
+          onConfirm={confirmRemove}
+        />
       )}
     </div>
   );
